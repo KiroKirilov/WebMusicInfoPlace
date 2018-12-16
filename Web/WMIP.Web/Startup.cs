@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WMIP.Automapper;
+using WMIP.Constants;
+using WMIP.Data;
+using WMIP.Data.Models;
 
 namespace WMIP.Web
 {
@@ -31,8 +38,38 @@ namespace WMIP.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDbContext<WmipDbContext>(options =>
+                options.UseLazyLoadingProxies()
+                    .UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            // Configure Identity
+            services.AddIdentity<User, IdentityRole>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<WmipDbContext>();
+
+            // Configure AutoMapper
+            var mapperConfig = new MapperConfig();
+            var config = mapperConfig.Execute(Assembly.GetExecutingAssembly());
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
+
+            // Change password requirements
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = PasswordConstants.RequireConfirmedEmail;
+                options.Password.RequireLowercase = PasswordConstants.RequireLowercase;
+                options.Password.RequireUppercase = PasswordConstants.RequireUppercase;
+                options.Password.RequireNonAlphanumeric = PasswordConstants.RequireNonAlphanumeric;
+                options.Password.RequiredLength = PasswordConstants.RequiredLength;
+                options.Password.RequiredUniqueChars = PasswordConstants.RequiredUniqueChars;
+            });
+
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +82,6 @@ namespace WMIP.Web
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
