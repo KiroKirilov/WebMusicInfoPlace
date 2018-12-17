@@ -12,7 +12,6 @@ namespace WMIP.Web.Controllers
     {
         public IActionResult Index()
         {
-            // comment
             return View();
         }
 

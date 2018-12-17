@@ -16,6 +16,7 @@ using WMIP.Automapper;
 using WMIP.Constants;
 using WMIP.Data;
 using WMIP.Data.Models;
+using WMIP.Web.Middlewares.Extensions;
 
 namespace WMIP.Web
 {
@@ -85,6 +86,7 @@ namespace WMIP.Web
                 app.UseHsts();
             }
 
+            app.UseSeedRoles();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
