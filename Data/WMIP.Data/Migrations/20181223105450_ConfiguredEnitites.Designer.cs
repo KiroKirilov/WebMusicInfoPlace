@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMIP.Data;
 
 namespace WMIP.Data.Migrations
 {
     [DbContext(typeof(WmipDbContext))]
-    partial class WmipDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181223105450_ConfiguredEnitites")]
+    partial class ConfiguredEnitites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,8 +194,6 @@ namespace WMIP.Data.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<string>("UserId");
-
                     b.HasKey("Id");
 
                     b.ToTable("Posts");
@@ -304,6 +304,7 @@ namespace WMIP.Data.Migrations
                 {
                     b.HasBaseType("WMIP.Data.Models.Common.Post<int>");
 
+                    b.Property<string>("UserId");
 
                     b.HasIndex("UserId");
 
@@ -318,10 +319,12 @@ namespace WMIP.Data.Migrations
 
                     b.Property<int>("CommentedOnId");
 
+                    b.Property<string>("UserId")
+                        .HasColumnName("Comment_UserId");
+
                     b.HasIndex("CommentedOnId");
 
-                    b.HasIndex("UserId")
-                        .HasName("IX_Posts_UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comment");
 
@@ -336,10 +339,12 @@ namespace WMIP.Data.Migrations
 
                     b.Property<int>("ReviewScore");
 
+                    b.Property<string>("UserId")
+                        .HasColumnName("Review_UserId");
+
                     b.HasIndex("AlbumId");
 
-                    b.HasIndex("UserId")
-                        .HasName("IX_Posts_UserId2");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Review");
 
@@ -427,7 +432,7 @@ namespace WMIP.Data.Migrations
 
             modelBuilder.Entity("WMIP.Data.Models.Article", b =>
                 {
-                    b.HasOne("WMIP.Data.Models.User", "User")
+                    b.HasOne("WMIP.Data.Models.User")
                         .WithMany("Articles")
                         .HasForeignKey("UserId");
                 });
@@ -441,8 +446,7 @@ namespace WMIP.Data.Migrations
 
                     b.HasOne("WMIP.Data.Models.User", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_Posts_AspNetUsers_UserId1");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("WMIP.Data.Models.Review", b =>
@@ -452,10 +456,9 @@ namespace WMIP.Data.Migrations
                         .HasForeignKey("AlbumId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("WMIP.Data.Models.User", "User")
+                    b.HasOne("WMIP.Data.Models.User")
                         .WithMany("Reviews")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_Posts_AspNetUsers_UserId2");
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

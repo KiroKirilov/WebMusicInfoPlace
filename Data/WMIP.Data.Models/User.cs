@@ -8,6 +8,7 @@ namespace WMIP.Data.Models
     {
         public User()
         {
+            this.RegisteredOn = DateTime.UtcNow;
             this.Songs = new HashSet<Song>();
             this.Albums = new HashSet<Album>();
             this.Comments = new HashSet<Comment>();
@@ -15,6 +16,8 @@ namespace WMIP.Data.Models
             this.Ratings = new HashSet<Rating>();
             this.Reviews = new HashSet<Review>();
         }
+
+        public DateTime RegisteredOn { get; set; }
 
         public virtual ICollection<Song> Songs { get; set; }
 

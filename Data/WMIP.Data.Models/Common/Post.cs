@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace WMIP.Data.Models.Common
+{
+    public abstract class Post<T> : BaseModel<T>
+    {
+        public Post()
+            : base()
+        {
+            this.Comments = new HashSet<Comment>();
+        }
+
+        public string Title { get; set; }
+
+        public string Body { get; set; }
+
+        public string UserId { get; set; }
+        public virtual User User { get; set; }
+
+        public virtual ICollection<Comment> Comments { get; set; }
+    }
+}

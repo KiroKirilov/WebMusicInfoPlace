@@ -10,8 +10,8 @@ using WMIP.Data;
 namespace WMIP.Data.Migrations
 {
     [DbContext(typeof(WmipDbContext))]
-    [Migration("20181216123622_Initial")]
-    partial class Initial
+    [Migration("20181223105753_ExtractedUserToPost")]
+    partial class ExtractedUserToPost
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -131,6 +131,124 @@ namespace WMIP.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WMIP.Data.Models.Album", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AlbumCoverLink");
+
+                    b.Property<string>("ArtistId");
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<string>("Genre");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("ReleaseDate");
+
+                    b.Property<string>("SpotifyLink");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtistId");
+
+                    b.ToTable("Albums");
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.AlbumSong", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AlbumId");
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<int>("SongId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlbumId");
+
+                    b.HasIndex("SongId");
+
+                    b.ToTable("AlbumsSongs");
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.Common.Post<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Body");
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.Property<string>("Title");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Posts");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Post<int>");
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<int>("RatingType");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Ratings");
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.Song", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ArtistId");
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<string>("Genre");
+
+                    b.Property<string>("Lyrics");
+
+                    b.Property<string>("MusicVideoLink");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("ReleaseDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtistId");
+
+                    b.ToTable("Songs");
+                });
+
             modelBuilder.Entity("WMIP.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -162,6 +280,8 @@ namespace WMIP.Data.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<DateTime>("RegisteredOn");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
@@ -180,6 +300,52 @@ namespace WMIP.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.Article", b =>
+                {
+                    b.HasBaseType("WMIP.Data.Models.Common.Post<int>");
+
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Article");
+
+                    b.HasDiscriminator().HasValue("Article");
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.Comment", b =>
+                {
+                    b.HasBaseType("WMIP.Data.Models.Common.Post<int>");
+
+                    b.Property<int>("CommentedOnId");
+
+                    b.HasIndex("CommentedOnId");
+
+                    b.HasIndex("UserId")
+                        .HasName("IX_Posts_UserId1");
+
+                    b.ToTable("Comment");
+
+                    b.HasDiscriminator().HasValue("Comment");
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.Review", b =>
+                {
+                    b.HasBaseType("WMIP.Data.Models.Common.Post<int>");
+
+                    b.Property<int>("AlbumId");
+
+                    b.Property<int>("ReviewScore");
+
+                    b.HasIndex("AlbumId");
+
+                    b.HasIndex("UserId")
+                        .HasName("IX_Posts_UserId2");
+
+                    b.ToTable("Review");
+
+                    b.HasDiscriminator().HasValue("Review");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -225,6 +391,73 @@ namespace WMIP.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.Album", b =>
+                {
+                    b.HasOne("WMIP.Data.Models.User", "Artist")
+                        .WithMany("Albums")
+                        .HasForeignKey("ArtistId");
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.AlbumSong", b =>
+                {
+                    b.HasOne("WMIP.Data.Models.Album", "Album")
+                        .WithMany("AlbumsSongs")
+                        .HasForeignKey("AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WMIP.Data.Models.Song", "Song")
+                        .WithMany("SongAlbums")
+                        .HasForeignKey("SongId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.Rating", b =>
+                {
+                    b.HasOne("WMIP.Data.Models.User", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.Song", b =>
+                {
+                    b.HasOne("WMIP.Data.Models.User", "Artist")
+                        .WithMany("Songs")
+                        .HasForeignKey("ArtistId");
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.Article", b =>
+                {
+                    b.HasOne("WMIP.Data.Models.User", "User")
+                        .WithMany("Articles")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.Comment", b =>
+                {
+                    b.HasOne("WMIP.Data.Models.Common.Post<int>", "CommentedOn")
+                        .WithMany("Comments")
+                        .HasForeignKey("CommentedOnId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("WMIP.Data.Models.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_Posts_AspNetUsers_UserId1");
+                });
+
+            modelBuilder.Entity("WMIP.Data.Models.Review", b =>
+                {
+                    b.HasOne("WMIP.Data.Models.Album", "Album")
+                        .WithMany("Reviews")
+                        .HasForeignKey("AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WMIP.Data.Models.User", "User")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_Posts_AspNetUsers_UserId2");
                 });
 #pragma warning restore 612, 618
         }
