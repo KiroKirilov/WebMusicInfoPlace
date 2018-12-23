@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\WMIP.Data.Models\WMIP.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\WMIP.Data\WMIP.Data.csproj" />
+  </ItemGroup>
+
+</Project>

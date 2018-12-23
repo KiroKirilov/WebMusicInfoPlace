@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Authentication
+
+@model WMIP.Web.Models.Users.LoginViewModel
+
+@inject IAuthenticationSchemeProvider SchemeProvider
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1 class="text-center">Login</h1>
+<hr class="hr-1 bg-info half-width" />
+<form class="mx-auto half-width" method="post" asp-action="Login">
+    <div class="form-group">
+        <label asp-for="Username"></label>
+        <input asp-for="Username" class="form-control" placeholder="Username..." />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="form-control" placeholder="Password..." />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="checkbox text-center">
+        <label asp-for="RememberMe">
+            <input asp-for="RememberMe" />
+            @Html.DisplayNameFor(m => m.RememberMe)
+        </label>
+    </div>
+    <div class="button-holder d-flex justify-content-center">
+        <button type="submit" class="btn bg-info">Login</button>
+    </div>
+</form>
+<br />
+<div class="text-center">
+    <a asp-controller="Accounts" asp-action="Register" class="text-info">Forgot your password?</a>
+</div>
+<div class="text-center">
+    <a asp-controller="Accounts" asp-action="Register" class="text-info">Register as a new user</a>
+</div>
+<hr class="hr-1 bg-info half-width" />
+<form asp-action="ExternalLogin" method="post" class="form-horizontal text-center">
+    <div>
+        <p>
+            @foreach (var provider in await SchemeProvider.GetRequestHandlerSchemesAsync())
+            {
+                <button type="submit" class="btn btn-info text-dark" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+            }
+        </p>
+    </div>
+</form>
+<hr class="hr-1 bg-info half-width" />

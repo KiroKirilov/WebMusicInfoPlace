@@ -14,6 +14,11 @@
     <ProjectReference Include="..\..\Common\WMIP.Automapper\WMIP.Automapper.csproj" />
     <ProjectReference Include="..\..\Common\WMIP.Constants\WMIP.Constants.csproj" />
     <ProjectReference Include="..\..\Data\WMIP.Data\WMIP.Data.csproj" />
+    <ProjectReference Include="..\..\Services\WMIP.Services\WMIP.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Users\" />
   </ItemGroup>
 
 </Project>

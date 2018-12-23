@@ -16,6 +16,8 @@ using WMIP.Automapper;
 using WMIP.Constants;
 using WMIP.Data;
 using WMIP.Data.Models;
+using WMIP.Services;
+using WMIP.Services.Contracts;
 using WMIP.Web.Middlewares.Extensions;
 
 namespace WMIP.Web
@@ -43,11 +45,7 @@ namespace WMIP.Web
                 options.UseLazyLoadingProxies()
                     .UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Configure Identity
-            services.AddIdentity<User, IdentityRole>()
-                .AddDefaultUI()
-                .AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<WmipDbContext>();
+            services.AddTransient<IUsersService, UsersService>();
 
             // Configure AutoMapper
             var mapperConfig = new MapperConfig();
@@ -58,6 +56,7 @@ namespace WMIP.Web
             // Change password requirements
             services.Configure<IdentityOptions>(options =>
             {
+                options.SignIn.RequireConfirmedPhoneNumber = false;
                 options.SignIn.RequireConfirmedEmail = PasswordConstants.RequireConfirmedEmail;
                 options.Password.RequireLowercase = PasswordConstants.RequireLowercase;
                 options.Password.RequireUppercase = PasswordConstants.RequireUppercase;
@@ -66,6 +65,10 @@ namespace WMIP.Web
                 options.Password.RequiredUniqueChars = PasswordConstants.RequiredUniqueChars;
             });
 
+            services.AddIdentity<User, IdentityRole>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<WmipDbContext>();
 
             services.AddMvc(options =>
             {
@@ -90,6 +93,7 @@ namespace WMIP.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
