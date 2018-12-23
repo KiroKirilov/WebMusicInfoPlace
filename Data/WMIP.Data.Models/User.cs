@@ -7,6 +7,7 @@ namespace WMIP.Data.Models
     public class User : IdentityUser
     {
         public User()
+            :base()
         {
             this.RegisteredOn = DateTime.UtcNow;
             this.Songs = new HashSet<Song>();
@@ -16,6 +17,10 @@ namespace WMIP.Data.Models
             this.Ratings = new HashSet<Rating>();
             this.Reviews = new HashSet<Review>();
         }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
 
         public DateTime RegisteredOn { get; set; }
 
