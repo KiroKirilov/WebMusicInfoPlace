@@ -29,6 +29,8 @@ namespace WMIP.Data
                 .HasMany(e => e.Comments)
                 .WithOne(x => x.CommentedOn)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<User>().HasMany(p => p.Roles).WithOne().HasForeignKey(p => p.UserId).IsRequired();
         }
     }
 }

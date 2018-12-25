@@ -16,6 +16,7 @@ namespace WMIP.Data.Models
             this.Articles = new HashSet<Article>();
             this.Ratings = new HashSet<Rating>();
             this.Reviews = new HashSet<Review>();
+            this.Roles = new HashSet<IdentityUserRole<string>>();
         }
 
         public string FirstName { get; set; }
@@ -23,6 +24,8 @@ namespace WMIP.Data.Models
         public string LastName { get; set; }
 
         public DateTime RegisteredOn { get; set; }
+
+        public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 
         public virtual ICollection<Song> Songs { get; set; }
 
