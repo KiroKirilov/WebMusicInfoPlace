@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WMIP.Data;
 using WMIP.Data.Models;
 using Microsoft.Extensions.DependencyInjection;
+using WMIP.Constants;
 
 namespace WMIP.Web.Middlewares
 {
@@ -33,10 +34,10 @@ namespace WMIP.Web.Middlewares
 
         private async Task SeedRoles(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            await roleManager.CreateAsync(new IdentityRole("User"));
-            await roleManager.CreateAsync(new IdentityRole("Admin"));
-            await roleManager.CreateAsync(new IdentityRole("Artist"));
-            await roleManager.CreateAsync(new IdentityRole("Critic"));
+            foreach (var role in UserConstants.Roles)
+            {
+                await roleManager.CreateAsync(new IdentityRole(role));
+            }
         }
     }
 }
