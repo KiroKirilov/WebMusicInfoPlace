@@ -1,0 +1,17 @@
+﻿@model WMIP.Web.Models.Articles.ArticleViewModel
+
+@{
+    ViewData["Title"] = "Create an article";
+}
+
+@Html.EditorForModel()
+
+
+@section Scripts {
+    <script src='https://cloud.tinymce.com/stable/tinymce.min.js'></script>
+    <script>
+        tinymce.init({
+            selector: '#bodyEditor'
+        });
+    </script>
+}
