@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WMIP.Data;
 using WMIP.Data.Models;
 using WMIP.Services.Contracts;
+using WMIP.Services.Dtos;
 
 namespace WMIP.Services
 {
@@ -22,9 +23,23 @@ namespace WMIP.Services
             this.context = context;
         }
 
-        public IQueryable<User> GetAllUsers()
+        public IEnumerable<UserDto> GetAllUsersWithRoles()
         {
-            return this.context.Users;
+            return this.context.Users.Select(u => new UserDto()
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                UserName = u.UserName,
+                Roles = u.Roles.SelectMany(userRole => this.context.Roles.Where(r => r.Id == userRole.RoleId).Select(r => r.Name)),
+            });
+        }
+
+        public User GetById(string id)
+        {
+            var user = this.context.Users.Find(id);
+            return user;
         }
 
         public bool Login(string username, string password, bool rememberMe)
@@ -71,6 +86,25 @@ namespace WMIP.Services
             }
 
             return creationResult.Succeeded;
+        }
+
+        public async Task<bool> SetUserRole(User user, string newRole)
+        {
+            try
+            {
+                var previousRoles = await this.userManager.GetRolesAsync(user);
+                if (previousRoles.Contains(newRole))
+                {
+                    return false;
+                }
+                await this.userManager.RemoveFromRolesAsync(user, previousRoles);
+                var assignmentResult = await this.userManager.AddToRoleAsync(user, newRole);
+                return assignmentResult.Succeeded;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WMIP.Automapper", "Common\W
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{57BB0BD5-3FC2-42A0-B13E-123A46F56128}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMIP.Services", "Services\WMIP.Services\WMIP.Services.csproj", "{97A7D895-BA93-499E-85B0-B08274181EA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WMIP.Services", "Services\WMIP.Services\WMIP.Services.csproj", "{97A7D895-BA93-499E-85B0-B08274181EA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

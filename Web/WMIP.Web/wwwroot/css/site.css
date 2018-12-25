@@ -35,3 +35,18 @@ body {
         display: none;
     }
 }
+
+.roleSelect {
+    max-width: 150px;
+    display: inline;
+    vertical-align: middle;
+}
+
+.changeRoleCell {
+    width: 272px;
+}
+
+.userManagementGridCell {
+    text-align: center;
+    display: table-cell;
+}

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WMIP.Data.Models;
+using WMIP.Services.Dtos;
 
 namespace WMIP.Services.Contracts
 {
@@ -15,6 +16,10 @@ namespace WMIP.Services.Contracts
 
         void Logout();
 
-        IQueryable<User> GetAllUsers();
+        IEnumerable<UserDto> GetAllUsersWithRoles();
+
+        User GetById(string id);
+
+        Task<bool> SetUserRole(User user, string role);
     }
 }

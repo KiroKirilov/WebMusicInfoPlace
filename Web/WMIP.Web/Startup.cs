@@ -48,15 +48,14 @@ namespace WMIP.Web
             services.AddTransient<IUsersService, UsersService>();
 
             // Configure AutoMapper
-            var mapperConfig = new MapperConfig();
-            var config = mapperConfig.Execute(Assembly.GetExecutingAssembly());
+            var mapperConfigBuilder = new MapperConfigBuilder();
+            var config = mapperConfigBuilder.Execute(Assembly.GetExecutingAssembly());
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
 
             // Change password requirements
             services.Configure<IdentityOptions>(options =>
             {
-                options.SignIn.RequireConfirmedPhoneNumber = false;
                 options.SignIn.RequireConfirmedEmail = PasswordConstants.RequireConfirmedEmail;
                 options.Password.RequireLowercase = PasswordConstants.RequireLowercase;
                 options.Password.RequireUppercase = PasswordConstants.RequireUppercase;
@@ -72,7 +71,7 @@ namespace WMIP.Web
 
             services.AddMvc(options =>
             {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -97,6 +96,8 @@ namespace WMIP.Web
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute("areaRoute", "{area:exists}/{controller=Admin}/{action=Index}/{id?}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
