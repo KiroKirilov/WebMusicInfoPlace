@@ -1,0 +1,83 @@
+﻿@using WMIP.Web.Areas.Admin.Models.Users
+@model UserManagementViewModel
+
+<link rel="stylesheet" href="~/css/mvc-grid.css" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" asp-append-version="true" />
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<h1 class="text-center">User Management</h1>
+
+@(Html
+    .Grid(Model.Users)
+    .Build(columns =>
+    {
+        columns.Add(user => user.UserName).Titled("Username");
+        columns.Add(user => user.FirstName).Titled("First name");
+        columns.Add(user => user.LastName).Titled("Last name");
+        columns.Add(user => user.Email).Titled("Email");
+        columns.Add(user => $"<p class='userManagementGridCell' data-id='{user.Id}'>{string.Join(", ", user.Roles)}</p>").Encoded(false).Titled("Role");
+        columns.Add(user => Html.Partial("_RoleSelectPartial",
+            new RoleSelectionViewModel
+            {
+                Roles = Model.AllRoles,
+                UserId = user.Id,
+                SelectedRole = user.Roles.Count() > 1 ? "" : user.Roles.First()
+            })).Encoded(false).AppendCss("changeRoleCell").Titled("Change user's role");
+    })
+    .Empty("No users found")
+    .Filterable()
+    .Sortable()
+    .Pageable()
+)
+
+@section Scripts {
+    <script src="~/js/mvc-grid.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        [].forEach.call(document.getElementsByClassName('mvc-grid'), function (element) {
+            new MvcGrid(element);
+        });
+
+        $("a.changeRoleBtn").on("click", (event) => {
+            const currentButton = $(event.currentTarget);
+            const userId = currentButton.attr("data-id");
+            console.log(userId);
+            if (userId) {
+                const newRole = $(`select[data-id=${userId}]`).val().toString();
+                const oldRole = $(`p[data-id=${userId}]`).text().toString();
+                toastr.options.positionClass = "toast-bottom-center";
+                if (true) {
+                    if (newRole != oldRole) {
+                        const data = JSON.stringify({ NewRole: newRole, UserId: userId });
+                        console.log(data);
+                        $.ajax({
+                            url: "/Admin/Users/ChangeRole",
+                            type: "POST",
+                            data: data,
+                            dataType: "json",
+                            contentType: "application/json",
+                            complete: (data) => changeRoleCallback(data, userId, newRole),
+                        });
+                    } else {
+                        toastr.warning('User is already in that role.');
+                    }
+                } else {
+                    toastr.error('Please select a role first.');
+                }
+            }
+        })
+
+        function changeRoleCallback(data, userId, newRole) {
+            if (data.responseJSON.ok) {
+                toastr.success("Role changed successfully");
+                $(`select[data-id=${userId}]`).val(newRole);
+                $(`p[data-id=${userId}]`).text(newRole);
+            } else {
+                toastr.error(data.responseJSON.reason || "Something went wrong :/");
+            }
+        }
+    </script>
+}

@@ -1,0 +1,29 @@
+﻿@model WMIP.Web.Models.Articles.ArticleViewModel
+
+<h1 class="text-center">Create an article</h1>
+<hr class="hr-1 bg-info w50" />
+<form class="mx-auto w50" method="post" asp-action="Create">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" placeholder="Username..." />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Body"></label>
+                <textarea id="bodyEditor" asp-for="Body" class="form-control" placeholder="Body"></textarea>
+                <span asp-validation-for="Body" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <hr class="hr-1 bg-info" />
+    <div class="button-holder d-flex justify-content-center">
+        <button type="submit" class="btn bg-info">Create</button>
+    </div>
+</form>
+
