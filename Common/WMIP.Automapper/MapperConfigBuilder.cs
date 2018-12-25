@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace WMIP.Automapper
 {
-    public class MapperConfig
+    public class MapperConfigBuilder
     {
         public MapperConfiguration Execute(Assembly assembly)
         {
