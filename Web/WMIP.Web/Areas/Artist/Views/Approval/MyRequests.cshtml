@@ -1,0 +1,34 @@
+﻿@model WMIP.Web.Areas.Artist.Models.Approval.MyApprovalRequestViewModel[]
+
+<link rel="stylesheet" href="~/css/mvc-grid.css" asp-append-version="true" />
+
+@{
+    ViewData["Title"] = "My Approval Requests";
+}
+
+<h1 class="text-center">My Approval Requests</h1>
+
+@(Html
+    .Grid(Model)
+    .Build(columns =>
+    {
+        columns.Add(item => item.Name).Titled("Item Name");
+        columns.Add(item => item.ItemType).Titled("Item Type");
+        columns.Add(item => item.ReleaseDate).Titled("Replease Date");
+        columns.Add(item => item.ReleaseStage).Titled("Release Stage");
+        columns.Add(item => item.ApprovalStatus).Titled("Approval Status");
+    })
+    .Empty("Nothing requested")
+    .Filterable()
+    .Sortable()
+    .Pageable()
+)
+
+@section Scripts {
+    <script src="~/js/mvc-grid.js"></script>
+    <script>
+        [].forEach.call(document.getElementsByClassName('mvc-grid'), function (element) {
+            new MvcGrid(element);
+        });
+    </script>
+}

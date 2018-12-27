@@ -1,0 +1,17 @@
+﻿@model WMIP.Web.Areas.Artist.Models.Songs.CreateSongViewModel
+
+@{
+    ViewData["Title"] = "Create a song";
+}
+
+@Html.EditorForModel()
+
+
+@section Scripts {
+    <script src='~/lib/tinymce/tinymce.min.js'></script>
+    <script>
+        tinymce.init({
+            selector: '#lyricsEditor'
+        });
+    </script>
+}
