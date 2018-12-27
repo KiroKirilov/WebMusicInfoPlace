@@ -5,13 +5,13 @@ using WMIP.Data.Models.Common;
 
 namespace WMIP.Data.Models
 {
-    public class Comment : Post<int>
+    public class Comment : Post
     {
         public Comment()
             : base()
         { }
 
         public int CommentedOnId { get; set; }
-        public virtual Post<int> CommentedOn { get; set; }
+        public virtual Post CommentedOn { get; set; }
     }
 }

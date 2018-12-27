@@ -2,30 +2,20 @@
 using System.Collections.Generic;
 using System.Text;
 using WMIP.Data.Models.Common;
+using WMIP.Data.Models.Enums;
 
 namespace WMIP.Data.Models
 {
-    public class Song : BaseModel<int>
+    public class Song : BaseMusicModel
     {
         public Song()
             : base()
-        {
-            this.SongAlbums = new HashSet<AlbumSong>();
-        }
-
-        public string Name { get; set; }
-
+        { }
+        
         public string MusicVideoLink { get; set; }
 
         public string Lyrics { get; set; }
-
-        public string Genre { get; set; }
-
-        public DateTime ReleaseDate { get; set; }
-
-        public string ArtistId { get; set; }
-        public virtual User Artist { get; set; }
-
-        public virtual ICollection<AlbumSong> SongAlbums { get; set; }
+        
+        public int TrackNumber { get; set; }
     }
 }

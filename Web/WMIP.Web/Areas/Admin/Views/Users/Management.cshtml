@@ -2,7 +2,6 @@
 @model UserManagementViewModel
 
 <link rel="stylesheet" href="~/css/mvc-grid.css" asp-append-version="true" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" asp-append-version="true" />
 
 @{
     ViewData["Title"] = "User Management";
@@ -35,7 +34,6 @@
 
 @section Scripts {
     <script src="~/js/mvc-grid.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         [].forEach.call(document.getElementsByClassName('mvc-grid'), function (element) {
             new MvcGrid(element);
@@ -44,15 +42,12 @@
         $("a.changeRoleBtn").on("click", (event) => {
             const currentButton = $(event.currentTarget);
             const userId = currentButton.attr("data-id");
-            console.log(userId);
             if (userId) {
                 const newRole = $(`select[data-id=${userId}]`).val().toString();
                 const oldRole = $(`p[data-id=${userId}]`).text().toString();
-                toastr.options.positionClass = "toast-bottom-center";
                 if (true) {
                     if (newRole != oldRole) {
                         const data = JSON.stringify({ NewRole: newRole, UserId: userId });
-                        console.log(data);
                         $.ajax({
                             url: "/Admin/Users/ChangeRole",
                             type: "POST",
@@ -67,16 +62,22 @@
                 } else {
                     toastr.error('Please select a role first.');
                 }
+            } else {
+                toastr.error("Couldn'get information about the user.");
             }
         })
 
         function changeRoleCallback(data, userId, newRole) {
-            if (data.responseJSON.ok) {
+            if (data && data.responseJSON && data.responseJSON.ok) {
                 toastr.success("Role changed successfully");
                 $(`select[data-id=${userId}]`).val(newRole);
                 $(`p[data-id=${userId}]`).text(newRole);
             } else {
-                toastr.error(data.responseJSON.reason || "Something went wrong :/");
+                if (data.responseJSON) {
+                    toastr.error(data.responseJSON.reason || "Something went wrong :/");
+                } else {
+                    toastr.error("Something went wrong :/");
+                }  
             }
         }
     </script>

@@ -41,11 +41,17 @@ namespace WMIP.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // Configure db context
             services.AddDbContext<WmipDbContext>(options =>
                 options.UseLazyLoadingProxies()
                     .UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Configure services
             services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IArticlesService, ArticlesService>();
+            services.AddTransient<ISongsService, SongsService>();
+            services.AddTransient<IApprovalService, ApprovalService>();
+            services.AddTransient<IAlbumsService, AlbumsService>();
 
             // Configure AutoMapper
             var mapperConfigBuilder = new MapperConfigBuilder();
@@ -64,6 +70,7 @@ namespace WMIP.Web
                 options.Password.RequiredUniqueChars = PasswordConstants.RequiredUniqueChars;
             });
 
+            // Configure idenityt
             services.AddIdentity<User, IdentityRole>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders()
@@ -71,7 +78,7 @@ namespace WMIP.Web
 
             services.AddMvc(options =>
             {
-                // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

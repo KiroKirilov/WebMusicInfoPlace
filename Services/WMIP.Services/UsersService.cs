@@ -42,6 +42,17 @@ namespace WMIP.Services
             return user;
         }
 
+        public string GetIdFromUsername(string username)
+        {
+            var user = this.context.Users.FirstOrDefault(u => u.UserName == username);
+            if (user != null)
+            {
+                return user.Id;
+            }
+
+            return null;
+        }
+
         public bool Login(string username, string password, bool rememberMe)
         {
             var loginResult = this.signInManager.PasswordSignInAsync(username, password, rememberMe, false).Result;

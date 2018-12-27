@@ -5,7 +5,7 @@ using WMIP.Data.Models.Common;
 
 namespace WMIP.Data.Models
 {
-    public class Review : Post<int>
+    public class Review : Post
     {
         public Review()
             : base()

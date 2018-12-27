@@ -137,6 +137,8 @@ namespace WMIP.Data.Migrations
 
                     b.Property<string>("AlbumCoverLink");
 
+                    b.Property<int>("ApprovalStatus");
+
                     b.Property<string>("ArtistId");
 
                     b.Property<DateTime>("CreatedOn");
@@ -145,7 +147,9 @@ namespace WMIP.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<DateTime>("ReleaseDate");
+                    b.Property<DateTime?>("ReleaseDate");
+
+                    b.Property<int>("ReleaseStage");
 
                     b.Property<string>("SpotifyLink");
 
@@ -177,7 +181,7 @@ namespace WMIP.Data.Migrations
                     b.ToTable("AlbumsSongs");
                 });
 
-            modelBuilder.Entity("WMIP.Data.Models.Common.Post<int>", b =>
+            modelBuilder.Entity("WMIP.Data.Models.Common.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -198,7 +202,7 @@ namespace WMIP.Data.Migrations
 
                     b.ToTable("Posts");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Post<int>");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Post");
                 });
 
             modelBuilder.Entity("WMIP.Data.Models.Rating", b =>
@@ -209,11 +213,15 @@ namespace WMIP.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<int>("PostId");
+
                     b.Property<int>("RatingType");
 
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
 
@@ -225,6 +233,8 @@ namespace WMIP.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApprovalStatus");
 
                     b.Property<string>("ArtistId");
 
@@ -238,7 +248,11 @@ namespace WMIP.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<DateTime>("ReleaseDate");
+                    b.Property<DateTime?>("ReleaseDate");
+
+                    b.Property<int>("ReleaseStage");
+
+                    b.Property<int>("TrackNumber");
 
                     b.HasKey("Id");
 
@@ -306,7 +320,7 @@ namespace WMIP.Data.Migrations
 
             modelBuilder.Entity("WMIP.Data.Models.Article", b =>
                 {
-                    b.HasBaseType("WMIP.Data.Models.Common.Post<int>");
+                    b.HasBaseType("WMIP.Data.Models.Common.Post");
 
 
                     b.HasIndex("UserId");
@@ -318,7 +332,7 @@ namespace WMIP.Data.Migrations
 
             modelBuilder.Entity("WMIP.Data.Models.Comment", b =>
                 {
-                    b.HasBaseType("WMIP.Data.Models.Common.Post<int>");
+                    b.HasBaseType("WMIP.Data.Models.Common.Post");
 
                     b.Property<int>("CommentedOnId");
 
@@ -334,7 +348,7 @@ namespace WMIP.Data.Migrations
 
             modelBuilder.Entity("WMIP.Data.Models.Review", b =>
                 {
-                    b.HasBaseType("WMIP.Data.Models.Common.Post<int>");
+                    b.HasBaseType("WMIP.Data.Models.Common.Post");
 
                     b.Property<int>("AlbumId");
 
@@ -410,13 +424,18 @@ namespace WMIP.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WMIP.Data.Models.Song", "Song")
-                        .WithMany("SongAlbums")
+                        .WithMany("AlbumsSongs")
                         .HasForeignKey("SongId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WMIP.Data.Models.Rating", b =>
                 {
+                    b.HasOne("WMIP.Data.Models.Common.Post", "Post")
+                        .WithMany("Ratings")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("WMIP.Data.Models.User", "User")
                         .WithMany("Ratings")
                         .HasForeignKey("UserId");
@@ -438,7 +457,7 @@ namespace WMIP.Data.Migrations
 
             modelBuilder.Entity("WMIP.Data.Models.Comment", b =>
                 {
-                    b.HasOne("WMIP.Data.Models.Common.Post<int>", "CommentedOn")
+                    b.HasOne("WMIP.Data.Models.Common.Post", "CommentedOn")
                         .WithMany("Comments")
                         .HasForeignKey("CommentedOnId")
                         .OnDelete(DeleteBehavior.Restrict);

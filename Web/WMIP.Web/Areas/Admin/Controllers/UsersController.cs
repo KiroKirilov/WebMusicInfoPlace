@@ -32,26 +32,28 @@ namespace WMIP.Web.Areas.Admin.Controllers
                 Users = this.mapper.Map<UserViewModel[]>(users),
                 AllRoles = UserConstants.Roles
             };
+
             return this.View(model);
         }
 
         [HttpPost]
+        [IgnoreAntiforgeryToken]
         public IActionResult ChangeRole([FromBody]ChangeRoleViewModel model)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.Json(new { ok = false, reason = GenericErrorMessages.InvalidDataProvided });
+                return this.Json(new { ok = false, reason = GenericMessages.InvalidDataProvided });
             }
 
             var user = this.usersService.GetById(model.UserId);
             if (user == null || !UserConstants.Roles.Contains(model.NewRole))
             {
-                return this.Json(new { ok = false, reason = string.Format(GenericErrorMessages.NotFound, "User") });
+                return this.Json(new { ok = false, reason = string.Format(GenericMessages.NotFound, "User") });
             }
             var successfullyChangedRole = this.usersService.SetUserRole(user, model.NewRole).GetAwaiter().GetResult();
             if (!successfullyChangedRole)
             {
-                return this.Json(new { ok = false, reason = string.Format(GenericErrorMessages.CouldntDoSomething, "set role") });
+                return this.Json(new { ok = false, reason = string.Format(GenericMessages.CouldntDoSomething, "set role") });
             }
 
             return this.Json(new { ok = true });

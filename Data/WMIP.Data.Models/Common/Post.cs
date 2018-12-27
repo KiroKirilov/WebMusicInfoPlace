@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WMIP.Data.Models.Common
 {
-    public abstract class Post<T> : BaseModel<T>
+    public abstract class Post : BaseModel<int>
     {
         public Post()
             : base()
@@ -20,5 +20,7 @@ namespace WMIP.Data.Models.Common
         public virtual User User { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<Rating> Ratings { get; set; }
     }
 }

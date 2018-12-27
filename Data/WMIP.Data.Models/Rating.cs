@@ -15,6 +15,9 @@ namespace WMIP.Data.Models
         public string UserId { get; set; }
         public virtual User User { get; set; }
 
+        public int PostId { get; set; }
+        public virtual Post Post { get; set; }
+
         public RatingType RatingType { get; set; }
     }
 }

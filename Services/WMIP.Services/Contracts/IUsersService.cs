@@ -21,5 +21,7 @@ namespace WMIP.Services.Contracts
         User GetById(string id);
 
         Task<bool> SetUserRole(User user, string role);
+
+        string GetIdFromUsername(string username);
     }
 }

@@ -24,7 +24,7 @@ namespace WMIP.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<Post<int>>()
+            builder.Entity<Post>()
                 .ToTable("Posts")
                 .HasMany(e => e.Comments)
                 .WithOne(x => x.CommentedOn)

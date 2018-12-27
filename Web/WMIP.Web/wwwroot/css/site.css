@@ -50,3 +50,24 @@ body {
     text-align: center;
     display: table-cell;
 }
+
+input[type=date] {
+    line-height: 1 !important;
+}
+
+.buttonContainer {
+    width: 175px;
+}
+
+.actionButton {
+    margin: 5px;
+    width: 77px;
+}
+
+.Rejected {
+    background-color: #c9302c;
+}
+
+.Approved {
+    background-color: #28a745;
+}

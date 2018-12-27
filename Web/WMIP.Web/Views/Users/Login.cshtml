@@ -9,8 +9,8 @@
 }
 
 <h1 class="text-center">Login</h1>
-<hr class="hr-1 bg-info half-width" />
-<form class="mx-auto half-width" method="post" asp-action="Login">
+<hr class="hr-1 bg-info w50" />
+<form class="mx-auto w50" method="post" asp-action="Login">
     <div class="form-group">
         <label asp-for="Username"></label>
         <input asp-for="Username" class="form-control" placeholder="Username..." />
@@ -38,7 +38,7 @@
 <div class="text-center">
     <a asp-controller="Accounts" asp-action="Register" class="text-info">Register as a new user</a>
 </div>
-<hr class="hr-1 bg-info half-width" />
+<hr class="hr-1 bg-info w50" />
 <form asp-action="ExternalLogin" method="post" class="form-horizontal text-center">
     <div>
         <p>
@@ -49,4 +49,4 @@
         </p>
     </div>
 </form>
-<hr class="hr-1 bg-info half-width" />
+<hr class="hr-1 bg-info w50" />
