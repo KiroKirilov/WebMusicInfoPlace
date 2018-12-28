@@ -19,7 +19,7 @@ namespace WMIP.Data
         public DbSet<Song> Songs { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<Review> Review { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
