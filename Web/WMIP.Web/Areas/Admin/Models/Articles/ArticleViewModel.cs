@@ -10,15 +10,15 @@ namespace WMIP.Web.Areas.Admin.Models.Articles
     public class ArticleViewModel
     {
         [Required]
-        [StringLength(maximumLength: ArticleConstants.TitleMaxLength, 
+        [StringLength(maximumLength: LengthConstants.TitleMaxLength, 
             ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
-            MinimumLength = ArticleConstants.MinLength)]
+            MinimumLength = LengthConstants.MinLength)]
         public string Title { get; set; }
 
         [Required]
-        [StringLength(maximumLength: ArticleConstants.BodyMaxLength,
+        [StringLength(maximumLength: LengthConstants.BodyMaxLength,
             ErrorMessage = "The {0} must be at least {2} characters long.",
-            MinimumLength = ArticleConstants.MinLength)]
+            MinimumLength = LengthConstants.MinLength)]
         public string Body { get; set; }
     }
 }
