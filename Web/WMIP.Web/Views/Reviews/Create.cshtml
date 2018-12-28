@@ -1,0 +1,19 @@
+﻿@model WMIP.Web.Models.Reviews.CreateReviewViewModel
+
+@{
+    ViewData["Title"] = $"{Model.AlbumName} - new review";
+}
+
+<h1 class="text-center">Write a review for @Model.AlbumName</h1>
+<hr class="hr-1 bg-info w50" />
+
+@Html.EditorForModel()
+
+@section Scripts {
+    <script src='~/lib/tinymce/tinymce.min.js'></script>
+    <script>
+        tinymce.init({
+            selector: '#bodyEditor'
+        });
+    </script>
+}

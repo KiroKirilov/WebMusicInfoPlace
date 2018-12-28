@@ -1,0 +1,20 @@
+﻿@model WMIP.Web.Models.Reviews.ReviewDetailsViewModel
+
+@{
+    ViewData["Title"] = $"{Model.AlbumName} - Review Details";
+}
+<script src="~/js/comment-template-helper.js"></script>
+
+@Html.DisplayForModel()
+
+@Html.Partial("NewCommentPartial", new NewCommentViewModel { PostId = Model.Id, Type = "comment" })
+
+@if (Model.Comments != null && Model.Comments.Count() > 0)
+{
+    foreach (var comment in Model.Comments)
+    {
+        <div class="commentBox">
+            @Html.Partial("CommentDisplayPartial", comment)
+        </div>
+    }
+}

@@ -1,0 +1,46 @@
+﻿@model WMIP.Web.Models.Reviews.CreateReviewViewModel
+
+<form class="mx-auto w50" method="post" asp-action="Create">
+    <input asp-for="AlbumId" type="hidden" />
+    <input asp-for="AlbumName" type="hidden" />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" placeholder="Title..." />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Body"></label>
+                <textarea id="bodyEditor" asp-for="Body" class="form-control" placeholder="Body..."></textarea>
+                <span asp-validation-for="Body" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Summary"></label>
+                <textarea asp-for="Summary" class="form-control" placeholder="Summary..."></textarea>
+                <span asp-validation-for="Summary" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="ReviewScore" class="numberLabel"></label>
+                <input asp-for="ReviewScore" class="form-control smallNumberInput" />
+                <span asp-validation-for="ReviewScore" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <hr class="hr-1 bg-info" />
+    <div class="button-holder d-flex justify-content-center">
+        <button type="submit" class="btn bg-info">Create</button>
+    </div>
+</form>

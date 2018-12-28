@@ -1,0 +1,36 @@
+﻿@model WMIP.Web.Models.Reviews.AllReviewsViewModel
+
+@{
+    ViewData["Title"] = $"Reviews - {Model.AlbumName}";
+}
+
+<h1 class="text-center">Reviews for <a href="/Albums/Details/@Model.AlbumId">@Model.AlbumName</a></h1>
+<hr class="hr-1 bg-info w50" />
+
+<ul class="nav nav-pills">
+    <li class="@(Model.SelectedFilter.ToLower() == "all" ? "active" : "")">
+        <a href="/Reviews/All/@Model.AlbumId">All</a>
+    </li>
+    <li class="@(Model.SelectedFilter.ToLower()  == "user" ? "active" : "")">
+        <a href="/Reviews/All/@Model.AlbumId?reviewType=User">User</a>
+    </li>
+    <li class="@(Model.SelectedFilter.ToLower()  == "critic" ? "active" : "")">
+        <a href="/Reviews/All/@Model.AlbumId?reviewType=Critic">Critic</a>
+    </li>
+</ul>
+
+<div class="container-fluid">
+    @if (Model.Reviews != null && Model.Reviews.Count() > 0)
+    {
+        <div class="row">
+            @foreach (var review in Model.Reviews)
+            {
+                @Html.DisplayFor(m => review)
+            }
+        </div>
+    }
+    else
+    {
+        <h3 class="text-danger">No reviews found.</h3>
+    }
+</div>
