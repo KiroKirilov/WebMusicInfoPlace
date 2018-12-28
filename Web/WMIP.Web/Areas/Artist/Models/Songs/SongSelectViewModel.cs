@@ -12,5 +12,7 @@ namespace WMIP.Web.Areas.Artist.Models.Songs
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public bool IsSelected { get; set; }
     }
 }

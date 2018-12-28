@@ -1,7 +1,13 @@
-﻿@model WMIP.Web.Areas.Artist.Models.Albums.CreateAlbumViewModel
+﻿@model WMIP.Web.Areas.Artist.Models.Albums.AlbumViewModel
 
 @{
     ViewData["Title"] = "Create an album";
 }
 
-@Html.EditorForModel()
+<h1 class="text-center">Create an album</h1>
+
+
+<form class="mx-auto w50" method="post" asp-action="Create">
+    @Html.EditorForModel()
+</form>
+

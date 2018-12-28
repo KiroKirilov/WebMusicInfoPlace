@@ -9,6 +9,8 @@ namespace WMIP.Web.Areas.Artist.Models.Common
 {
     public abstract class BaseMusicItemCreationViewModel
     {
+        public int? Id { get; set; }
+
         [Required]
         public string Name { get; set; }
 

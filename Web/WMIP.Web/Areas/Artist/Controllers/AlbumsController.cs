@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace WMIP.Web.Areas.Artist.Controllers
         private readonly IAlbumsService albumsService;
         private readonly IMapper mapper;
 
-        public AlbumsController(ISongsService songsService, IUsersService usersService, IAlbumsService albumsService,IMapper mapper)
+        public AlbumsController(ISongsService songsService, IUsersService usersService, IAlbumsService albumsService, IMapper mapper)
         {
             this.songsService = songsService;
             this.usersService = usersService;
@@ -31,7 +32,7 @@ namespace WMIP.Web.Areas.Artist.Controllers
 
         public IActionResult Create()
         {
-            var model = new CreateAlbumViewModel();
+            var model = new AlbumViewModel();
             var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
             if (userId == null)
             {
@@ -44,7 +45,7 @@ namespace WMIP.Web.Areas.Artist.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateAlbumViewModel model)
+        public IActionResult Create(AlbumViewModel model)
         {
             var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
             if (userId == null)
@@ -59,7 +60,7 @@ namespace WMIP.Web.Areas.Artist.Controllers
                 this.EnsureModelSongs(model, userId);
                 return this.View(model);
             }
-            
+
             var creationResult = this.albumsService.CreateNew(
                 model.Name, model.Genre, model.ReleaseDate, model.ReleaseStage, model.SpotifyLink, model.AlbumCoverLink, model.SelectedSongIds, userId);
 
@@ -74,23 +75,87 @@ namespace WMIP.Web.Areas.Artist.Controllers
             return this.View(model);
         }
 
-        private void EnsureModelSongs(CreateAlbumViewModel model, string userId = null)
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the album you were looking for");
+                return this.RedirectToAction("MyRequests", "Approval");
+            }
+
+            var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
+            if (userId == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find user");
+                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+            }
+            var album = this.albumsService.GetById(id.Value);
+            var model = this.mapper.Map<AlbumViewModel>(album);
+            this.EnsureModelSongs(model, userId, model.SelectedSongIds);
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(AlbumViewModel model)
+        {
+            var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
+            if (userId == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find artist");
+                this.EnsureModelSongs(model);
+                return this.View(model);
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                this.EnsureModelSongs(model, userId);
+                return this.View(model);
+            }
+
+            var userCanEditItem = this.albumsService.IsUserCreator(userId, model.Id.Value);
+
+            if (!userCanEditItem)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "edit item");
+                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+            }
+
+            var editResult = this.albumsService.Edit(
+                model.Id.Value, model.Name, model.Genre, model.ReleaseDate, model.ReleaseStage, model.SpotifyLink, model.AlbumCoverLink, model.SelectedSongIds);
+
+            if (editResult)
+            {
+                this.TempData["Success"] = string.Format(GenericMessages.SuccessfullyDidSomething, "submitted album for approval");
+                return this.RedirectToAction("MyRequests", "Approval");
+            }
+
+            this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "submit edit for approval");
+            this.EnsureModelSongs(model, userId, model.SelectedSongIds);
+            return this.View(model);
+        }
+
+        private void EnsureModelSongs(AlbumViewModel model, string userId = null, IEnumerable<int> selectedIds = null)
         {
             if (userId == null)
             {
-                model.AvailableSongs = new SongSelectViewModel[0];
+                model.AvailableSongs = new SelectListItem[0];
                 return;
+            }
+
+            if (selectedIds == null)
+            {
+                selectedIds = new int[0];
             }
 
             try
             {
-                var songs = this.songsService.GetUsersApprovedSongs(userId);
-                var mappedSongs = this.mapper.Map<SongSelectViewModel[]>(songs);
-                model.AvailableSongs = mappedSongs;
+                var songs = this.songsService.GetUsersApprovedSongs(userId)
+                    .Select(s => new SelectListItem(s.Name, s.Id.ToString(), selectedIds.Contains(s.Id)));
+                model.AvailableSongs = songs;
             }
             catch
             {
-                model.AvailableSongs = new SongSelectViewModel[0];
+                model.AvailableSongs = new SelectListItem[0];
             }
         }
     }
