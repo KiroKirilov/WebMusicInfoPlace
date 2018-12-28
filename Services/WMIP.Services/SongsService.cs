@@ -45,6 +45,11 @@ namespace WMIP.Services
             }
         }
 
+        public Song GetById(int songId)
+        {
+            return this.context.Songs.Find(songId);
+        }
+
         public IEnumerable<Song> GetUsersApprovedSongs(string userId)
         {
             var songs = this.context.Songs.Where(s => s.ArtistId == userId).ToList();

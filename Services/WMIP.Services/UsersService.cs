@@ -36,9 +36,32 @@ namespace WMIP.Services
             });
         }
 
+        public IEnumerable<string> GetRolesForUser(User user)
+        {
+            try
+            {
+                var roles = user.Roles
+                    .SelectMany(userRole =>
+                        this.context.Roles.Where(r => r.Id == userRole.RoleId)
+                    .Select(r => r.Name));
+
+                return roles;
+            }
+            catch
+            {
+                return new List<string>();
+            }
+        }
+
         public User GetById(string id)
         {
             var user = this.context.Users.Find(id);
+            return user;
+        }
+
+        public User GetByUsername(string username)
+        {
+            var user = this.context.Users.FirstOrDefault(u => u.UserName == username);
             return user;
         }
 
