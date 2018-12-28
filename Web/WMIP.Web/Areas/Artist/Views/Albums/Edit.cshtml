@@ -1,0 +1,12 @@
+﻿@model WMIP.Web.Areas.Artist.Models.Albums.AlbumViewModel
+
+@{
+    ViewData["Title"] = "Edit an album";
+}
+
+<h1 class="text-center">Edit an album</h1>
+
+<form class="mx-auto w50" method="post" asp-action="Edit">
+    @Html.EditorForModel()
+</form>
+

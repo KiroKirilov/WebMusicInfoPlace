@@ -1,0 +1,54 @@
+﻿@model WMIP.Web.Models.Albums.AlbumDetailsViewModel
+
+<div class="text-center">
+    <h1 class="font-weight-bold">@Model.Name</h1>
+    <h6>by: @Model.ArtistName</h6>
+    <h6 class="font-italic">@Model.Genre</h6>
+</div>
+<hr class="hr-1 bg-info w50" />
+<div class="container-fluid">
+    <div class="row">
+        <div class="text-center col-md-4">
+            <img src="@(Model.AlbumCoverLink ?? "/images/default-album-art.png")" class="img-fluid" width="250" height="250" />
+            <p class="text-center small font-italic">Release date: @(Model.ReleaseDate.HasValue ? Model.ReleaseDate.Value.ToLongDateString() : "Not specified")</p>
+
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
+                <p>User score:</p>
+                <a href="/Reviews/All/@Model.Id?reviewType=User" class="btn @Model.UserClass">@Model.UserScore.ToString("f2")</a>
+            </div>
+            <div class="col-md-5">
+                <p>Critic score:</p>
+                <a href="/Reviews/All/@Model.Id?reviewType=Critic" class="btn @Model.CriticClass">@Model.CriticScore.ToString("f2")</a>
+            </div>
+            <div class="col-md-1"></div>
+            @if (Model.SpotifyLink != null)
+            {
+                <div class="row text-center">
+                    <div class="col-md-12">
+                        <a href="@Model.SpotifyLink" target="_blank" class="btn btn-success text-center text-dark top10">Listen to on Spotify</a>
+                    </div>
+                </div>
+            }
+            @if (this.User.Identity.IsAuthenticated)
+            {
+                <div class="row text-center">
+                    <div class="col-md-12">
+                        <a href="/Reviews/Create/@Model.Id" class="btn btn-primary text-center top10">Write a review</a>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-md-8">
+            @if (Model.Songs != null && Model.Songs.Count() > 0)
+            {
+                <h3 class="text-center mtop0">Tracklist:</h3>
+                @foreach (var song in Model.Songs)
+                {
+                    @Html.DisplayFor(m => song)
+                }
+            }
+
+        </div>
+    </div>
+</div>
