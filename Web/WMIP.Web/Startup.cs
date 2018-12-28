@@ -52,6 +52,8 @@ namespace WMIP.Web
             services.AddTransient<ISongsService, SongsService>();
             services.AddTransient<IApprovalService, ApprovalService>();
             services.AddTransient<IAlbumsService, AlbumsService>();
+            services.AddTransient<IReviewsService, ReviewsService>();
+            services.AddTransient<ICommentsService, CommentsService>();
 
             // Configure AutoMapper
             var mapperConfigBuilder = new MapperConfigBuilder();
