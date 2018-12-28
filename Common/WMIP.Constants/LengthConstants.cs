@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WMIP.Constants
 {
-    public static class ArticleConstants
+    public static class LengthConstants
     {
         public const int MinLength = 3;
 
