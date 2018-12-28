@@ -3,8 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WMIP.Web</title>
+    <title>@ViewData["Title"]</title>
 
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script src="~/js/unobtrusiveajax.js"></script>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
@@ -50,7 +53,6 @@
         </footer>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.js"></script>
     <environment include="Development">
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
@@ -71,7 +73,6 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
-    <script src="~/lib/toastr/toastr.min.js"></script>
     <script>
         toastr.options.positionClass = "toast-bottom-center";
 
