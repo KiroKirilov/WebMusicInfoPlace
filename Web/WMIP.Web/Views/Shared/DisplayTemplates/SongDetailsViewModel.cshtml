@@ -1,0 +1,28 @@
+﻿@model WMIP.Web.Models.Songs.SongDetailsViewModel
+
+<div class="text-center">
+    <h1 class="font-weight-bold">@Model.Name</h1>
+    <h6>by: @Model.ArtistName</h6>
+    <h6 class="font-italic">@Model.Genre</h6>
+</div>
+<hr class="hr-1 bg-info w50" />
+<div class="container-fluid">
+    <div class="row">
+        <div class="text-center col-md-6">
+            <iframe width="420" height="315" id="musicVideo"></iframe>
+            <p class="text-center small font-italic">Release date: @(Model.ReleaseDate.HasValue ? Model.ReleaseDate.Value.ToLongDateString() : "Not specified")</p>
+            @if (Model.Albums != null && Model.Albums.Count() > 0)
+            {
+                 <h3 class="text-center mtop0">Appears in:</h3>
+                foreach (var album in Model.Albums)
+                {
+                    @Html.DisplayFor(m => album)
+                }
+            }
+        </div>
+        <div class="col-md-6 text-center">
+            <h3 class="mtop0">Lyrics:</h3>
+            <p>@Html.Raw(Model.Lyrics)</p>
+        </div>
+    </div>
+</div>

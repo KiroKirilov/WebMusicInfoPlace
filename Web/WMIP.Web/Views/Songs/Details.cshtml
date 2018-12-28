@@ -1,0 +1,25 @@
+﻿@model WMIP.Web.Models.Songs.SongDetailsViewModel
+
+@{
+    ViewData["Title"] = $"{Model.Name} - Details";
+}
+
+@Html.DisplayForModel()
+
+
+@section Scripts {
+    <script src="~/js/video-embedding-helper.js"></script>
+    <script>
+    $(document).ready(() => {
+        const videoUrl = '@Model.MusicVideoLink';
+        const videoId = getVideoIdFromUrl(videoUrl);
+        if (!videoId) {
+            $('#musicVideo').hide();
+        } else {
+            const embeddedUrl = "//www.youtube.com/embed/" + videoId;
+            console.log(embeddedUrl);
+            $('#musicVideo').attr("src", embeddedUrl);
+        }
+    })
+    </script>
+}
