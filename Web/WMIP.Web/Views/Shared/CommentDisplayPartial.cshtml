@@ -1,0 +1,38 @@
+﻿@model CommentDisplayViewModel
+
+<div class="commentParent">
+    <div class="commentHeader">
+        <h6><b>@Model.Title</b>, by @Model.Author, submitted on: @Model.CreatedOn.ToShortDateString(), @Model.CreatedOn.ToShortTimeString()</h6>
+        <span title="Hide" class="hideComment">-</span>
+        @Html.Partial("NewCommentPartial", new NewCommentViewModel { PostId = Model.Id, Type = "reply" })
+    </div>
+    <div class="commentBody">
+        <p>@Model.Body</p>
+        <div class="newCommentsContainer"></div>
+        @if (Model.Replies != null && Model.Replies.Count() > 0)
+        {
+            <div class="commentReply">
+            @foreach (var reply in Model.Replies)
+            {
+                @Html.Partial("CommentDisplayPartial", reply)
+            }
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(".hideComment").off("click");
+    $(".hideComment").on("click", handleCommentHide);
+
+    function handleCommentHide(event) {
+        var currentTargetObj = $(event.currentTarget);
+        currentTargetObj.parent().parent().children(".commentBody").first().slideToggle();
+        var currentSymbol = currentTargetObj.text();
+        if (currentSymbol === "-") {
+            currentTargetObj.text("+");
+        } else {
+            currentTargetObj.text("-");
+        }
+    }
+</script>

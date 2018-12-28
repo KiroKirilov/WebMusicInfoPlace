@@ -1,0 +1,67 @@
+﻿@model WMIP.Web.Models.Common.Comments.NewCommentViewModel
+
+@{ 
+    Layout = null;
+}
+
+<div>
+    <a class="btn btn-primary newCommentButton">Write a @Model.Type</a>
+    <div class="newCommentsContainer"></div>
+
+    <div class="formPopup newCommentForm">
+        <form class="mx-auto w50" asp-controller="Comments" asp-action="Create" data-ajax-complete="onCommentComplete" data-ajax-failure="onCommentFail" data-ajax="true" data-ajax-method="POST">
+            <input asp-for="Username" value="@User.Identity.Name" type="hidden" />
+            <input asp-for="PostId" type="hidden" />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Title"></label>
+                        <input asp-for="Title" class="form-control" placeholder="Title..." />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Body"></label>
+                        <textarea id="bodyEditor" asp-for="Body" class="form-control" placeholder="Body..."></textarea>
+                        <span asp-validation-for="Body" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="button-holder d-flex justify-content-center">
+                <button type="submit" class="btn bg-info">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var selectedButton = $("");
+
+    $(".newCommentButton").off("click");
+    $(".newCommentButton").on("click", (event) => {
+        $(event.currentTarget).siblings(".newCommentForm").slideToggle();
+        selectedButton = $(event.currentTarget);
+    })
+    
+    function onCommentComplete(data) {
+        console.log("success");
+        console.log(data);
+        if (data && data.responseJSON && data.responseJSON.ok) {
+            toastr.success("Comment added successfully.");
+            $(".newCommentForm").slideUp();
+            var newCommentInfo = data.responseJSON.info;
+            console.log(newCommentInfo);
+            var newCommentHtml = buildNewComment(newCommentInfo.title, newCommentInfo.body, newCommentInfo.author, newCommentInfo.date, newCommentInfo.time);
+            selectedButton.parent().parent().parent().children(".commentBody").children(".newCommentsContainer").prepend(newCommentHtml);
+            // selectedButton.parent().children(".newCommentsContainer").prepend(newCommentHtml);
+        }
+    }
+
+    function onCommentFail(data) {
+        console.log(data.responseText);
+        toastr.error("Something went wrong :/");
+    }
+</script>
