@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WMIP.Services.Dtos
+namespace WMIP.Services.Dtos.Users
 {
     public class UserDto
     {
