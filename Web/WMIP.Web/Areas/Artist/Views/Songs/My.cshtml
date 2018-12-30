@@ -1,0 +1,42 @@
+﻿@model IEnumerable<WMIP.Web.Areas.Artist.Models.Songs.MySongViewModel>
+
+<link rel="stylesheet" href="~/css/mvc-grid.css" asp-append-version="true" />
+
+@{
+    ViewData["Title"] = "My Songs";
+}
+
+<h1 class="text-center">My Songs</h1>
+<hr class="hr-1 bg-info w50" />
+
+@(Html
+    .Grid(Model)
+    .Build(columns =>
+    {
+        columns.Add(song => song.Name).Titled("Name");
+        columns.Add(song => song.Genre).Titled("Genre");
+        columns.Add(song => song.ReleaseStage).Titled("Replease Stage");
+        columns.Add(song => song.ReleaseDate.HasValue ? song.ReleaseDate.Value.ToShortDateString() : "Not specified.").Titled("Release Date");
+        columns.Add(song => song.ApprovalStatus).Titled("Approval Status");
+        columns.Add(song => $"<div class='buttonContainer'>" +
+            $"<a href='/Artist/Songs/Edit/{song.Id}' class='btn btn-primary actionButton'>Edit</a>" +
+            $"<a href='/Artist/Songs/Delete/{song.Id}' class='btn btn-danger actionButton'>Delete</a>" +
+            $"</div>").Encoded(false).AppendCss("buttonContainer").Titled("Actions");
+    })
+    .Empty("No songs")
+    .Filterable()
+    .Sortable()
+    .Pageable(pager =>
+    {
+        pager.RowsPerPage = 10;
+    })
+)
+
+@section Scripts {
+    <script src="~/js/mvc-grid.js"></script>
+    <script>
+        [].forEach.call(document.getElementsByClassName('mvc-grid'), function (element) {
+            new MvcGrid(element);
+        });
+    </script>
+}

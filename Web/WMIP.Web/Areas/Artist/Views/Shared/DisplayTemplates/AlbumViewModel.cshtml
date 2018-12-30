@@ -6,7 +6,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label asp-for="Name"></label>
-            <input asp-for="Name" class="form-control" placeholder="Name..." />
+            <input disabled="disabled" asp-for="Name" class="form-control" placeholder="Name..." />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
     </div>
@@ -15,7 +15,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label asp-for="Genre"></label>
-            <input asp-for="Genre" class="form-control" placeholder="Genre..." />
+            <input disabled="disabled" asp-for="Genre" class="form-control" placeholder="Genre..." />
             <span asp-validation-for="Genre" class="text-danger"></span>
         </div>
     </div>
@@ -24,14 +24,14 @@
     <div class="col-md-6">
         <div class="form-group">
             <label asp-for="ReleaseStage"></label>
-            @Html.DropDownListFor(m => m.ReleaseStage, Html.GetEnumSelectList<WMIP.Data.Models.Enums.ReleaseStage>(), new { @class = "form-control", id = "ReleaseStage" })
+            @Html.DropDownListFor(m => m.ReleaseStage, Html.GetEnumSelectList<WMIP.Data.Models.Enums.ReleaseStage>(), new { @class = "form-control", id = "ReleaseStage", disables="disabled" })
             <span asp-validation-for="ReleaseStage" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group">
             <label asp-for="ReleaseDate"></label>
-            <input asp-for="ReleaseDate" type="date" class="form-control" placeholder="Release Date..." />
+            <input disabled="disabled" asp-for="ReleaseDate" type="date" class="form-control" placeholder="Release Date..." />
             <span asp-validation-for="ReleaseDate" class="text-danger"></span>
         </div>
     </div>
@@ -40,14 +40,14 @@
     <div class="col-md-6">
         <div class="form-group">
             <label asp-for="SpotifyLink"></label>
-            <input asp-for="SpotifyLink" class="form-control" placeholder="Spotify Link..." />
+            <input disabled="disabled" asp-for="SpotifyLink" class="form-control" placeholder="Spotify Link..." />
             <span asp-validation-for="SpotifyLink" class="text-danger"></span>
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group">
             <label asp-for="AlbumCoverLink"></label>
-            <input asp-for="AlbumCoverLink" class="form-control" placeholder="Album Cover Link.." />
+            <input disabled="disabled" asp-for="AlbumCoverLink" class="form-control" placeholder="Album Cover Link.." />
             <span asp-validation-for="AlbumCoverLink" class="text-danger"></span>
         </div>
     </div>
@@ -55,12 +55,12 @@
 <div class="row">
     <div class="col-md-12">
         <label asp-for="SelectedSongIds"></label>
-        @Html.ListBoxFor(model => model.SelectedSongIds, Model.AvailableSongs, new { @class = "form-control", multiple = "multiple" })
+        @Html.ListBoxFor(model => model.SelectedSongIds, Model.AvailableSongs, new { @class = "form-control", multiple = "multiple", disabled="disabled" })
         <span asp-validation-for="SelectedSongIds" class="text-danger"></span>
     </div>
 </div>
 <hr class="hr-1 bg-info" />
 <div class="button-holder text-center">
-    <button type="submit" class="btn bg-info">Submit for approval</button>
+    <button type="submit" class="btn bg-info">Delete</button>
 </div>
 

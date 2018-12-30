@@ -1,4 +1,4 @@
-﻿@model WMIP.Web.Areas.Artist.Models.Albums.AlbumViewModel
+﻿@model WMIP.Web.Areas.Artist.Models.Songs.SongViewModel
 
 <hr class="hr-1 bg-info w50" />
 <input asp-for="Id" type="hidden" value="@Model.Id" />
@@ -37,26 +37,26 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="form-group">
-            <label asp-for="SpotifyLink"></label>
-            <input asp-for="SpotifyLink" class="form-control" placeholder="Spotify Link..." />
-            <span asp-validation-for="SpotifyLink" class="text-danger"></span>
+            <label asp-for="TrackNumber"></label>
+            <input asp-for="TrackNumber" class="form-control" placeholder="Track Number..." />
+            <span asp-validation-for="TrackNumber" class="text-danger"></span>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="form-group">
-            <label asp-for="AlbumCoverLink"></label>
-            <input asp-for="AlbumCoverLink" class="form-control" placeholder="Album Cover Link.." />
-            <span asp-validation-for="AlbumCoverLink" class="text-danger"></span>
+            <label asp-for="MusicVideoLink"></label>
+            <input asp-for="MusicVideoLink" class="form-control" placeholder="Music Video Link.." />
+            <span asp-validation-for="MusicVideoLink" class="text-danger"></span>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-12">
-        <label asp-for="SelectedSongIds"></label>
-        @Html.ListBoxFor(model => model.SelectedSongIds, Model.AvailableSongs, new { @class = "form-control", multiple = "multiple" })
-        <span asp-validation-for="SelectedSongIds" class="text-danger"></span>
+        <label asp-for="Lyrics"></label>
+        <textarea id="lyricsEditor" asp-for="Lyrics" class="form-control" placeholder="Lyrics..."></textarea>
+        <span asp-validation-for="Lyrics" class="text-danger"></span>
     </div>
 </div>
 <hr class="hr-1 bg-info" />

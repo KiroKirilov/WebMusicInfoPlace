@@ -13,7 +13,7 @@ using WMIP.Web.Areas.Artist.Models.Songs;
 
 namespace WMIP.Web.Areas.Artist.Models.Albums
 {
-    public class AlbumViewModel : BaseMusicItemCreationViewModel, IHaveCustomMappings
+    public class AlbumViewModel : BaseMusicItemViewModel, IHaveCustomMappings
     {
         [Display(Name = "Link To Spotify Page")]
         public string SpotifyLink { get; set; }

@@ -1,17 +1,17 @@
 ﻿@model WMIP.Web.Areas.Artist.Models.Songs.SongViewModel
 
 @{
-    ViewData["Title"] = "Create a song";
+    ViewData["Title"] = "Delete a song";
 }
 
-<h1 class="text-center">Create a song</h1>
+<h1 class="text-center">Delete a song</h1>
 
 <div class="container">
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <form class="mx-auto w50" method="post" asp-action="Create">
-                @Html.EditorForModel()
+            <form class="mx-auto w50" method="post" asp-action="Delete">
+                @Html.DisplayForModel()
             </form>
         </div>
     </div>
@@ -21,7 +21,8 @@
     <script src='~/lib/tinymce/tinymce.min.js'></script>
     <script>
         tinymce.init({
-            selector: '#lyricsEditor'
+            selector: '#lyricsEditor',
+            readonly: 1
         });
     </script>
 }

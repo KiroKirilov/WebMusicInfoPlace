@@ -6,8 +6,15 @@
 
 <h1 class="text-center">Create an album</h1>
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <form class="mx-auto w50" method="post" asp-action="Create">
+                @Html.EditorForModel()
+            </form>
+        </div>
+    </div>
+</div>
 
-<form class="mx-auto w50" method="post" asp-action="Create">
-    @Html.EditorForModel()
-</form>
 

@@ -1,16 +1,16 @@
 ﻿@model WMIP.Web.Areas.Artist.Models.Songs.SongViewModel
 
 @{
-    ViewData["Title"] = "Create a song";
+    ViewData["Title"] = "Edit a song";
 }
 
-<h1 class="text-center">Create a song</h1>
+<h1 class="text-center">Edit a song</h1>
 
 <div class="container">
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <form class="mx-auto w50" method="post" asp-action="Create">
+            <form class="mx-auto w50" method="post" asp-action="Edit">
                 @Html.EditorForModel()
             </form>
         </div>

@@ -67,7 +67,7 @@ namespace WMIP.Web.Areas.Artist.Controllers
             if (creationResult)
             {
                 this.TempData["Success"] = string.Format(GenericMessages.SuccessfullyDidSomething, "submitted album for approval");
-                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+                return this.RedirectToAction("My", "Albums");
             }
 
             this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "submit album for approval");
@@ -80,7 +80,7 @@ namespace WMIP.Web.Areas.Artist.Controllers
             if (id == null)
             {
                 this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the album you were looking for");
-                return this.RedirectToAction("MyRequests", "Approval");
+                return this.RedirectToAction("My", "Albums");
             }
 
             var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
@@ -89,7 +89,20 @@ namespace WMIP.Web.Areas.Artist.Controllers
                 this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find user");
                 return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
             }
+            var userCanEditItem = this.albumsService.IsUserCreator(userId, id.Value);
+
+            if (!userCanEditItem)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "edit item");
+                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+            }
             var album = this.albumsService.GetById(id.Value);
+
+            if (album == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the album you were looking for");
+                return this.RedirectToAction("My", "Albums");
+            }
             var model = this.mapper.Map<AlbumViewModel>(album);
             this.EnsureModelSongs(model, userId, model.SelectedSongIds);
             return this.View(model);
@@ -134,6 +147,64 @@ namespace WMIP.Web.Areas.Artist.Controllers
             return this.View(model);
         }
 
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the album you were looking for");
+                return this.RedirectToAction("My", "Albums");
+            }
+
+            var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
+            if (userId == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find user");
+                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+            }
+            var userIsCreator = this.albumsService.IsUserCreator(userId, id.Value);
+
+            if (!userIsCreator)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "edit item");
+                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+            }
+            var album = this.albumsService.GetById(id.Value);
+            var model = this.mapper.Map<AlbumViewModel>(album);
+            this.EnsureModelSongs(model, userId, model.SelectedSongIds);
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(AlbumViewModel model)
+        {
+            var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
+            if (userId == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find artist");
+                this.EnsureModelSongs(model);
+                return this.RedirectToAction("My", "Albums");
+            }
+
+            var userIsCreator = this.albumsService.IsUserCreator(userId, model.Id.Value);
+
+            if (!userIsCreator)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "edit item");
+                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+            }
+
+            var deletetionResult = this.albumsService.Delete(model.Id.Value);
+
+            if (deletetionResult)
+            {
+                this.TempData["Success"] = string.Format(GenericMessages.SuccessfullyDidSomething, "deleted album");
+                return this.RedirectToAction("My", "Albums");
+            }
+
+            this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "delete album");
+            return this.RedirectToAction("My", "Albums");
+        }
+
         private void EnsureModelSongs(AlbumViewModel model, string userId = null, IEnumerable<int> selectedIds = null)
         {
             if (userId == null)
@@ -157,6 +228,21 @@ namespace WMIP.Web.Areas.Artist.Controllers
             {
                 model.AvailableSongs = new SelectListItem[0];
             }
+        }
+
+        public IActionResult My()
+        {
+            var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
+            if (userId == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find artist");
+                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+            }
+
+            var albumsByUser = this.albumsService.GetAllAlbumsByUser(userId);
+            var mappedSongs = this.mapper.Map<IEnumerable<MyAlbumViewModel>>(albumsByUser);
+
+            return this.View(mappedSongs);
         }
     }
 }

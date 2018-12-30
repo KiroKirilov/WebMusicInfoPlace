@@ -1,0 +1,42 @@
+﻿@model IEnumerable<WMIP.Web.Areas.Artist.Models.Albums.MyAlbumViewModel>
+
+<link rel="stylesheet" href="~/css/mvc-grid.css" asp-append-version="true" />
+
+@{
+    ViewData["Title"] = "My Albums";
+}
+
+<h1 class="text-center">My Albums</h1>
+<hr class="hr-1 bg-info w50" />
+
+@(Html
+    .Grid(Model)
+    .Build(columns =>
+    {
+        columns.Add(album => album.Name).Titled("Name");
+        columns.Add(album => album.Genre).Titled("Genre");
+        columns.Add(album => album.ReleaseStage).Titled("Replease Stage");
+        columns.Add(album => album.ReleaseDate.HasValue ? album.ReleaseDate.Value.ToShortDateString() : "Not specified.").Titled("Release Date");
+        columns.Add(album => album.ApprovalStatus).Titled("Approval Status");
+        columns.Add(album => $"<div class='buttonContainer'>" +
+            $"<a href='/Artist/Albums/Edit/{album.Id}' class='btn btn-primary actionButton'>Edit</a>" +
+            $"<a href='/Artist/Albums/Delete/{album.Id}' class='btn btn-danger actionButton'>Delete</a>" +
+            $"</div>").Encoded(false).AppendCss("buttonContainer").Titled("Actions");
+    })
+    .Empty("No albums")
+    .Filterable()
+    .Sortable()
+    .Pageable(pager =>
+    {
+        pager.RowsPerPage = 10;
+    })
+)
+
+@section Scripts {
+    <script src="~/js/mvc-grid.js"></script>
+    <script>
+        [].forEach.call(document.getElementsByClassName('mvc-grid'), function (element) {
+            new MvcGrid(element);
+        });
+    </script>
+}

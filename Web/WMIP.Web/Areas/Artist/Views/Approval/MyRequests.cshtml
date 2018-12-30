@@ -22,7 +22,10 @@
     .Empty("Nothing requested")
     .Filterable()
     .Sortable()
-    .Pageable()
+    .Pageable(pager =>
+    {
+        pager.RowsPerPage = 10;
+    })
 )
 
 @section Scripts {

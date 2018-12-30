@@ -7,7 +7,7 @@ using WMIP.Data.Models.Enums;
 
 namespace WMIP.Web.Areas.Artist.Models.Common
 {
-    public abstract class BaseMusicItemCreationViewModel
+    public abstract class BaseMusicItemViewModel
     {
         public int? Id { get; set; }
 
