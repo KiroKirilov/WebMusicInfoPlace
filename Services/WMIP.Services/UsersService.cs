@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using WMIP.Data;
 using WMIP.Data.Models;
 using WMIP.Services.Contracts;
-using WMIP.Services.Dtos;
+using WMIP.Services.Dtos.Users;
 
 namespace WMIP.Services
 {
@@ -25,15 +26,22 @@ namespace WMIP.Services
 
         public IEnumerable<UserDto> GetAllUsersWithRoles()
         {
-            return this.context.Users.Select(u => new UserDto()
+            try
             {
-                Id = u.Id,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Email = u.Email,
-                UserName = u.UserName,
-                Roles = u.Roles.SelectMany(userRole => this.context.Roles.Where(r => r.Id == userRole.RoleId).Select(r => r.Name)),
-            });
+                return this.context.Users.Select(u => new UserDto()
+                {
+                    Id = u.Id,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.Email,
+                    UserName = u.UserName,
+                    Roles = u.Roles.SelectMany(userRole => this.context.Roles.Where(r => r.Id == userRole.RoleId).Select(r => r.Name)),
+                });
+            }
+            catch
+            {
+                return new List<UserDto>();
+            }
         }
 
         public IEnumerable<string> GetRolesForUser(User user)
@@ -133,9 +141,10 @@ namespace WMIP.Services
                 }
                 await this.userManager.RemoveFromRolesAsync(user, previousRoles);
                 var assignmentResult = await this.userManager.AddToRoleAsync(user, newRole);
+
                 return assignmentResult.Succeeded;
             }
-            catch (Exception)
+            catch
             {
                 return false;
             }

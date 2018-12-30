@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using WMIP.Data;
 using WMIP.Data.Models;
@@ -36,6 +37,18 @@ namespace WMIP.Services
             {
                 comment = null;
                 return false;
+            }
+        }
+
+        public IEnumerable<Comment> GetCommentsByUser(string userId)
+        {
+            try
+            {
+                return this.context.Comments.Where(c => c.UserId == userId);
+            }
+            catch
+            {
+                return new List<Comment>();
             }
         }
     }

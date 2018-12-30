@@ -13,5 +13,15 @@ namespace WMIP.Services.Contracts
         IEnumerable<Song> GetUsersApprovedSongs(string userId);
 
         Song GetById(int songId);
+
+        Song GetNotSecretById(int id);
+
+        IEnumerable<Song> GetAllSongsByUser(string userId);
+
+        bool IsUserCreator(string userId, int songId);
+
+        bool Edit(int sondId, string name, string genre, DateTime? releaseDate, ReleaseStage releaseStage, int trackNumber, string mvLink, string lyrics);
+
+        bool Delete(int songId);
     }
 }
