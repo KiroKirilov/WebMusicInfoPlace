@@ -1,0 +1,44 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <input id="searchBar" type="search" class="form-control searchbar" placeholder="Search..." />
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 searchResults" id="resultsBox">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#searchBar').on('input', function () {
+        clearTimeout(this.delay);
+        this.delay = setTimeout(function () {
+            $(this).trigger('search');
+        }.bind(this), 500);
+    }).on('search', function () {
+        if (this.value) {
+            getResults(this.value);
+        }
+    });
+
+    function getResults(searchTerm) {
+        $.ajax({
+            url: `/Search/Find?searchTerm=${searchTerm}`,
+            type: "GET",
+            contentType: "application/json",
+            success: searchResultsCallback,
+        });
+    }
+
+    function searchResultsCallback(data) {
+        if (data) {
+            $("#resultsBox").html(data);
+            $("#resultsBox").slideDown();
+            $(".collapse").off("click");
+            $(".collapse-icon").on("click", () => {
+                $("#resultsBox").slideUp();
+            });
+        }
+    }
+</script>

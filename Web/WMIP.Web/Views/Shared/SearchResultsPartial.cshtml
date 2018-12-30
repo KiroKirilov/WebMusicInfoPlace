@@ -1,0 +1,25 @@
+﻿@model IEnumerable<WMIP.Services.Dtos.Search.SearchResultDto>
+
+@if (Model != null && Model.Count() > 0)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <span class="glyphicon glyphicon-remove float-right collapse-icon"></span>
+        </div>
+    </div> 
+    @foreach (var result in Model)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="link-container">
+                    <a class="float-left fixed-size-link" href="/@(result.SearchResultType)s/Details/@result.Id">@result.Title</a>
+                    <p class="float-right mbottom0">@result.SearchResultType</p>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p class="text-danger">No results found.</p>
+}
