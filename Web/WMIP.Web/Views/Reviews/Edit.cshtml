@@ -1,17 +1,17 @@
 ﻿@model WMIP.Web.Models.Reviews.CreateReviewViewModel
 
 @{
-    ViewData["Title"] = $"{Model.AlbumName} - new review";
+    ViewData["Title"] = $"{Model.AlbumName} - edit review";
 }
 
-<h1 class="text-center">Write a review for @Model.AlbumName</h1>
+<h1 class="text-center">Edit a review for @Model.AlbumName</h1>
 <hr class="hr-1 bg-info w50" />
 
 <div class="container">
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            <form class="mx-auto w50" method="post" asp-action="Create">
+            <form class="mx-auto w50" method="post" asp-action="Edit">
                 @Html.EditorForModel()
             </form>
         </div>

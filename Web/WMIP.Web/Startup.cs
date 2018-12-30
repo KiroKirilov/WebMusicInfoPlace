@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using WMIP.Automapper;
 using WMIP.Constants;
 using WMIP.Data;
@@ -54,6 +56,7 @@ namespace WMIP.Web
             services.AddTransient<IAlbumsService, AlbumsService>();
             services.AddTransient<IReviewsService, ReviewsService>();
             services.AddTransient<ICommentsService, CommentsService>();
+            services.AddTransient<ISearchService, SearchService>();
 
             // Configure AutoMapper
             var mapperConfigBuilder = new MapperConfigBuilder();
@@ -72,16 +75,28 @@ namespace WMIP.Web
                 options.Password.RequiredUniqueChars = PasswordConstants.RequiredUniqueChars;
             });
 
-            // Configure idenityt
+            // Configure identity
             services.AddIdentity<User, IdentityRole>()
-                .AddDefaultUI()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<WmipDbContext>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = new PathString("/Users/Login");
+                options.LogoutPath = new PathString("/Users/Logout");
+                options.AccessDeniedPath = new PathString("/Users/AccessDenied");
+            });
+
+            services.Configure<SecurityStampValidatorOptions>(options =>
+            {
+                options.ValidationInterval = TimeSpan.Zero;
+            });
 
             services.AddMvc(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

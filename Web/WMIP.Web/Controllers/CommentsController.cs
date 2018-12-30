@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 using WMIP.Constants;
 using WMIP.Data.Models;
 using WMIP.Services.Contracts;
-using WMIP.Web.Models.Common.Comments;
+using WMIP.Web.Models.Comments;
 
 namespace WMIP.Web.Controllers
 {
@@ -15,11 +16,13 @@ namespace WMIP.Web.Controllers
     {
         private readonly ICommentsService commentsService;
         private readonly IUsersService usersService;
+        private readonly IMapper mapper;
 
-        public CommentsController(ICommentsService commentsService, IUsersService usersService)
+        public CommentsController(ICommentsService commentsService, IUsersService usersService, IMapper mapper)
         {
             this.commentsService = commentsService;
             this.usersService = usersService;
+            this.mapper = mapper;
         }
 
         [HttpPost]
@@ -48,6 +51,22 @@ namespace WMIP.Web.Controllers
             };
 
             return this.Json(new { ok = true, info = commentInfo});
+        }
+
+        [Authorize]
+        public IActionResult My()
+        {
+            var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
+            if (userId == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find user");
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            var commentsByUser = this.commentsService.GetCommentsByUser(userId);
+            var mappedComments= this.mapper.Map<IEnumerable<MyCommentViewModel>>(commentsByUser);
+
+            return this.View(mappedComments);
         }
     }
 }

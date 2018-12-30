@@ -72,10 +72,16 @@ namespace WMIP.Web.Controllers
             return this.RedirectToAction("Index", "Home");
         }
 
+        [HttpPost]
         public IActionResult Logout()
         {
             this.userService.Logout();
             return this.RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return this.View();
         }
     }
 }

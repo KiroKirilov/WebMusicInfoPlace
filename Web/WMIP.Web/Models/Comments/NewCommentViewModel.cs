@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WMIP.Web.Models.Common.Comments
+namespace WMIP.Web.Models.Comments
 {
     public class NewCommentViewModel
     {

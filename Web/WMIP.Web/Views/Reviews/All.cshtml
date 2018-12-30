@@ -5,6 +5,14 @@
 }
 
 <h1 class="text-center">Reviews for <a href="/Albums/Details/@Model.AlbumId">@Model.AlbumName</a></h1>
+@if (this.User.Identity.IsAuthenticated)
+{
+    <div class="row text-center">
+        <div class="col-md-12">
+            <a href="/Reviews/Create/@Model.AlbumId" class="btn btn-primary text-center top10">Write a review</a>
+        </div>
+    </div>
+}
 <hr class="hr-1 bg-info w50" />
 
 <ul class="nav nav-pills">

@@ -152,5 +152,157 @@ namespace WMIP.Web.Controllers
 
             return this.View(model);
         }
+
+        [Authorize]
+        public IActionResult My()
+        {
+            var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
+            if (userId == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find user");
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            var reviewsByUser = this.reviewsService.GetReviewsByUser(userId);
+            var mappedReviews = this.mapper.Map<IEnumerable<MyReviewViewModel>>(reviewsByUser);
+
+            return this.View(mappedReviews);
+        }
+
+        [Authorize]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the review you were looking for");
+                return this.RedirectToAction("My", "Reviews");
+            }
+
+            var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
+            if (userId == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find user");
+                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+            }
+            var userCanEditItem = this.reviewsService.IsUserCreator(userId, id.Value);
+
+            if (!userCanEditItem)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "edit item");
+                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+            }
+            var review = this.reviewsService.GetById(id.Value);
+            if (review == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the review you were looking for");
+                return this.RedirectToAction("My", "Reviews");
+            }
+            var model = this.mapper.Map<CreateReviewViewModel>(review);
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(CreateReviewViewModel model)
+        {
+            var user = this.usersService.GetByUsername(this.User.Identity.Name);
+            if (user == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find user");
+                return this.View(model);
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var userCanEditItem = this.reviewsService.IsUserCreator(user.Id, model.Id);
+
+            if (!userCanEditItem)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "edit item");
+                return this.RedirectToAction("My", "Reviews");
+            }
+
+            var userRoles = this.usersService.GetRolesForUser(user);
+            var reviewType = this.reviewsService.GetReviewType(userRoles);
+            var editResult = this.reviewsService.Edit(
+                model.Id, model.Title, model.Body, model.Summary, model.ReviewScore.Value, reviewType);
+
+            if (editResult)
+            {
+                this.TempData["Success"] = string.Format(GenericMessages.SuccessfullyDidSomething, "edited review");
+                return this.RedirectToAction("My", "Reviews");
+            }
+
+            this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "edit review");
+            return this.View(model);
+        }
+
+        [Authorize]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the review you were looking for");
+                return this.RedirectToAction("My", "Reviews");
+            }
+
+            var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
+            if (userId == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find user");
+                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+            }
+            var userCanEditItem = this.reviewsService.IsUserCreator(userId, id.Value);
+
+            if (!userCanEditItem)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "delete item");
+                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+            }
+            var review = this.reviewsService.GetById(id.Value);
+            if (review == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the review you were looking for");
+                return this.RedirectToAction("My", "Reviews");
+            }
+            var model = this.mapper.Map<CreateReviewViewModel>(review);
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Delete(CreateReviewViewModel model)
+        {
+            var user = this.usersService.GetByUsername(this.User.Identity.Name);
+            if (user == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find user");
+                return this.RedirectToAction("My", "Reviews");
+            }
+
+            var userCanEditItem = this.reviewsService.IsUserCreator(user.Id, model.Id);
+
+            if (!userCanEditItem)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "delete item");
+                return this.RedirectToAction("My", "Reviews");
+            }
+
+            var userRoles = this.usersService.GetRolesForUser(user);
+            var reviewType = this.reviewsService.GetReviewType(userRoles);
+            var deletionResult = this.reviewsService.Delete(model.Id);
+
+            if (deletionResult)
+            {
+                this.TempData["Success"] = string.Format(GenericMessages.SuccessfullyDidSomething, "deleted review");
+                return this.RedirectToAction("My", "Reviews");
+            }
+
+            this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "delete review");
+            return this.RedirectToAction("My", "Reviews");
+        }
     }
 }

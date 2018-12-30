@@ -3,7 +3,15 @@
 <div class="text-center">
     <h1 class="font-weight-bold">@Model.Title</h1>
     <h6>a review by: @Model.ReviewerName, @Model.ReviewType</h6>
-    <h6 class="font-italic">for: <a href="/Albums/Details/@Model.AlbumId">@Model.AlbumName</a></h6>
+    <h6>written on: @Model.CreatedOn.ToShortDateString(), @Model.CreatedOn.ToShortTimeString()</h6>
+    @if (Model.AlbumName == null)
+    {
+        <h6 class="font-italic">for: [deleted]</h6>
+    }
+    else
+    {
+        <h6 class="font-italic">for: <a href="/Albums/Details/@Model.AlbumId">@Model.AlbumName</a></h6>
+    }
 </div>
 <hr class="hr-1 bg-info w50" />
 

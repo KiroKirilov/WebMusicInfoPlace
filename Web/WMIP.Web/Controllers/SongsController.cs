@@ -29,7 +29,7 @@ namespace WMIP.Web.Controllers
                 return this.RedirectToAction("Index", "Home");
             }
 
-            var song = this.songsService.GetById(id.Value);
+            var song = this.songsService.GetNotSecretById(id.Value);
             if (song == null)
             {
                 this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find song");

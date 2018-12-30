@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-fixed-top abolute-important">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -31,14 +31,27 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">WMIP.Web</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Web Music Info Place</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="Articles" asp-action="All">All Articles</a></li>
+                    @if (this.User != null && this.User.Identity.IsAuthenticated)
+        {
+            Html.RenderPartial("LoggedInNavigation");
+        }
+                    @if (this.User != null && this.User.IsInRole("Admin"))
+        {
+            Html.RenderPartial("AdminNavigation");
+        }
+
+                    @if (this.User != null && this.User.IsInRole("Artist"))
+        {
+            Html.RenderPartial("ArtistNavigation");
+        }
                 </ul>
+                @Html.Partial("_LoginPartial")
+                @Html.Partial("SearchPartial")
             </div>
         </div>
     </nav>
@@ -49,7 +62,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2018 - WMIP.Web</p>
+            <p>&copy; 2018 - Web Music Info Place</p>
         </footer>
     </div>
 

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WMIP.Data.Models;
 
-namespace WMIP.Web.Models.Common.Comments
+namespace WMIP.Web.Models.Comments
 {
     public class CommentDisplayViewModel : IHaveCustomMappings
     {

@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using WMIP.Data.Models;
 
-namespace WMIP.Web.Models.Reviews
+namespace WMIP.Web.Models.Articles
 {
-    public class DisplayReviewViewModel : IHaveCustomMappings
+    public class ArticleDisplayViewModel : IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -18,14 +18,12 @@ namespace WMIP.Web.Models.Reviews
 
         public DateTime CreatedOn { get; set; }
 
-        public string Reviewer { get; set; }
-
-        public int ReviewScore { get; set; }
+        public string AuthorName { get; set; }
 
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {
-            configuration.CreateMap<Review, DisplayReviewViewModel>()
-                .ForMember(m => m.Reviewer, opts => opts.MapFrom(e => e.User.UserName));
+            configuration.CreateMap<Article, ArticleDisplayViewModel>()
+                .ForMember(m => m.AuthorName, opts => opts.MapFrom(e => e.User.UserName));
         }
     }
 }

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<WMIP.Web.Models.Reviews.MyReviewViewModel>
+
+<link rel="stylesheet" href="~/css/mvc-grid.css" asp-append-version="true" />
+
+@{
+    ViewData["Title"] = "My Reviews";
+}
+
+<h1 class="text-center">My Reviews</h1>
+<hr class="hr-1 bg-info w50" />
+
+@(Html
+    .Grid(Model)
+    .Build(columns =>
+    {
+        columns.Add(review => review.Title).Titled("Title");
+        columns.Add(review => review.AlbumName ?? "[deleted]").Titled("Album Name");
+        columns.Add(review => $"{review.ReviewScore}/10").Titled("Score");
+        columns.Add(review => $"{review.CreatedOn.ToShortDateString()} {review.CreatedOn.ToShortTimeString()}").Titled("Created On");
+        columns.Add(review => $"<div class='buttonContainer text-center'>" +
+            $"<a href='/Reviews/Edit/{review.Id}' class='btn btn-primary actionButton'>Edit</a>" +
+            $"<a href='/Reviews/Delete/{review.Id}' class='btn btn-danger actionButton'>Delete</a>" +
+            $"</div>").Encoded(false).AppendCss("buttonContainer").Titled("Actions");
+    })
+    .Empty("No reviews")
+    .Filterable()
+    .Sortable()
+    .Pageable(pager =>
+    {
+        pager.RowsPerPage = 10;
+    })
+)
+
+@section Scripts {
+    <script src="~/js/mvc-grid.js"></script>
+    <script>
+        [].forEach.call(document.getElementsByClassName('mvc-grid'), function (element) {
+            new MvcGrid(element);
+        });
+    </script>
+}

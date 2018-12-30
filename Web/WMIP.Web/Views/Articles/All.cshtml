@@ -1,0 +1,19 @@
+﻿@model IEnumerable<WMIP.Web.Models.Articles.ArticleDisplayViewModel>
+
+<div class="container-fluid">
+    <div class="row">
+        @if (Model != null && Model.Count() > 0)
+        {
+            @foreach (var article in Model)
+            {
+                <div class="col-md-6">
+                    @Html.DisplayFor(m => article)
+                </div>
+            }
+        }
+        else
+        {
+            <h3 class="text-danger">No articles found.</h3>
+        }
+    </div>
+</div>

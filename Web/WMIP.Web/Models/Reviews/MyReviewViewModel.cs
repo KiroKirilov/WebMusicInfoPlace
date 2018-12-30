@@ -8,24 +8,22 @@ using WMIP.Data.Models;
 
 namespace WMIP.Web.Models.Reviews
 {
-    public class DisplayReviewViewModel : IHaveCustomMappings
+    public class MyReviewViewModel : IHaveCustomMappings
     {
         public int Id { get; set; }
 
         public string Title { get; set; }
 
-        public string Summary { get; set; }
+        public int ReviewScore { get; set; }
+
+        public string AlbumName { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
-        public string Reviewer { get; set; }
-
-        public int ReviewScore { get; set; }
-
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {
-            configuration.CreateMap<Review, DisplayReviewViewModel>()
-                .ForMember(m => m.Reviewer, opts => opts.MapFrom(e => e.User.UserName));
+            configuration.CreateMap<Review, MyReviewViewModel>()
+                .ForMember(m => m.AlbumName, opts => opts.MapFrom(e => e.Album.Name));
         }
     }
 }

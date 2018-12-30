@@ -1,12 +1,10 @@
-﻿@model WMIP.Web.Models.Reviews.DisplayReviewViewModel
+﻿@model WMIP.Web.Models.Articles.ArticleDisplayViewModel
 
-
-
-<div class="col-md-6 col-lg-6">
+<div class="col-md-12 col-lg-12">
     <div class="card">
         <div class="card-header">
             <b>@Model.Title</b>
-            <h6>by: @Model.Reviewer</h6>
+            <h6>by: @Model.AuthorName</h6>
             <h6>written on: @Model.CreatedOn.ToShortDateString(), @Model.CreatedOn.ToShortTimeString()</h6>
         </div>
         <div class="card-body">
@@ -20,8 +18,7 @@
                     @Model.Summary
                 }
             </h5>
-            <p class="card-text">@Model.ReviewScore/10</p>
-            <a href="/Reviews/Details/@Model.Id" class="btn btn-primary">Full review</a>
+            <a href="/Articles/Details/@Model.Id" class="btn btn-primary">Full article</a>
         </div>
     </div>
 </div>

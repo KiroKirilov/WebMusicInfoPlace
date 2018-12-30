@@ -34,7 +34,14 @@ namespace WMIP.Web.Controllers
                 return this.RedirectToAction("Index", "Home");
             }
 
-            var album = this.albumsService.GetById(id.Value);
+            var album = this.albumsService.GetNotSecretById(id.Value);
+
+            if (album == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find album");
+                return this.RedirectToAction("Index", "Home");
+            }
+
             var model = this.mapper.Map<AlbumDetailsViewModel>(album);
 
             return this.View(model);
