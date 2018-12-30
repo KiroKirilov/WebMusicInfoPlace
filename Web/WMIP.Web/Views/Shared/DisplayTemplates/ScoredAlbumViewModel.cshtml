@@ -1,0 +1,7 @@
+﻿@model WMIP.Web.Models.Albums.ScoredAlbumViewModel
+
+<div class="col-md-12">
+    <a class="float-left" href="/Albums/Details/@Model.Id">@Model.Name</a>
+    <a href="/Reviews/All/@Model.Id?reviewType=@ViewData["ReviewType"]" class="btn @Model.ScoreClass float-right mbottom0">@Model.AverageScore.ToString("f2")</a>
+    <h6 class="font-italic signature score-signature">by: @Model.ArtistName</h6>
+</div>
