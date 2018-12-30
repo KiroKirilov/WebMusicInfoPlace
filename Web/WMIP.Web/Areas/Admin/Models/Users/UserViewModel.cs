@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WMIP.Data.Models;
-using WMIP.Services.Dtos;
+using WMIP.Services.Dtos.Users;
 
 namespace WMIP.Web.Areas.Admin.Models.Users
 {

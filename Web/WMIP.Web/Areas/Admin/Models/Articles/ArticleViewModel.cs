@@ -9,6 +9,8 @@ namespace WMIP.Web.Areas.Admin.Models.Articles
 {
     public class ArticleViewModel
     {
+        public int Id { get; set; }
+
         [Required]
         [StringLength(maximumLength: LengthConstants.TitleMaxLength, 
             ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
@@ -20,5 +22,7 @@ namespace WMIP.Web.Areas.Admin.Models.Articles
             ErrorMessage = "The {0} must be at least {2} characters long.",
             MinimumLength = LengthConstants.MinLength)]
         public string Body { get; set; }
+        
+        public string Summary { get; set; }
     }
 }

@@ -27,6 +27,7 @@ namespace WMIP.Web.Areas.Admin.Controllers
         public IActionResult Management()
         {
             var users = this.usersService.GetAllUsersWithRoles().ToList();
+            var a = this.User.IsInRole("Admin");
             var model = new UserManagementViewModel
             {
                 Users = this.mapper.Map<UserViewModel[]>(users),
@@ -51,6 +52,7 @@ namespace WMIP.Web.Areas.Admin.Controllers
                 return this.Json(new { ok = false, reason = string.Format(GenericMessages.NotFound, "User") });
             }
             var successfullyChangedRole = this.usersService.SetUserRole(user, model.NewRole).GetAwaiter().GetResult();
+            
             if (!successfullyChangedRole)
             {
                 return this.Json(new { ok = false, reason = string.Format(GenericMessages.CouldntDoSomething, "set role") });

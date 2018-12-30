@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WMIP.Constants;
 using WMIP.Services.Contracts;
 using WMIP.Web.Areas.Admin.Models.Articles;
@@ -16,11 +16,13 @@ namespace WMIP.Web.Areas.Admin.Controllers
     {
         private readonly IArticlesService articlesSerivce;
         private readonly IUsersService usersService;
+        private readonly IMapper mapper;
 
-        public ArticlesController(IArticlesService articlesSerivce, IUsersService usersService)
+        public ArticlesController(IArticlesService articlesSerivce, IUsersService usersService, IMapper mapper)
         {
             this.articlesSerivce = articlesSerivce;
             this.usersService = usersService;
+            this.mapper = mapper;
         }
 
         public IActionResult Create()
@@ -43,7 +45,7 @@ namespace WMIP.Web.Areas.Admin.Controllers
                 return this.View(model);
             }
 
-            var creationResult = this.articlesSerivce.CreateNew(model.Title, model.Body, userId);
+            var creationResult = this.articlesSerivce.CreateNew(model.Title, model.Body, model.Summary, userId);
 
             if (creationResult)
             {
@@ -53,6 +55,85 @@ namespace WMIP.Web.Areas.Admin.Controllers
             
             this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "create article");
             return this.View(model);
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the article you were looking for");
+                return this.RedirectToAction("Management", "Articles");
+            }
+
+            var article = this.articlesSerivce.GetById(id.Value);
+            if (article == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the article you were looking for");
+                return this.RedirectToAction("Management", "Articles");
+            }
+            var model = this.mapper.Map<ArticleViewModel>(article);
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ArticleViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var editResult = this.articlesSerivce.Edit(
+                model.Id, model.Title, model.Body, model.Summary);
+
+            if (editResult)
+            {
+                this.TempData["Success"] = string.Format(GenericMessages.SuccessfullyDidSomething, "edited article");
+                return this.RedirectToAction("Management", "Articles");
+            }
+
+            this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "edit article");
+            return this.View(model);
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the article you were looking for");
+                return this.RedirectToAction("Management", "Articles");
+            }
+
+            var article = this.articlesSerivce.GetById(id.Value);
+            if (article == null)
+            {
+                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the article you were looking for");
+                return this.RedirectToAction("Management", "Articles");
+            }
+            var model = this.mapper.Map<ArticleViewModel>(article);
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(ArticleViewModel model)
+        {
+            var deletionResult = this.articlesSerivce.Delete(model.Id);
+
+            if (deletionResult)
+            {
+                this.TempData["Success"] = string.Format(GenericMessages.SuccessfullyDidSomething, "deleted article");
+                return this.RedirectToAction("Management", "Articles");
+            }
+
+            this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "delete article");
+            return this.RedirectToAction("Management", "Articles");
+        }
+
+        public IActionResult Management()
+        {
+            var articles = this.articlesSerivce.GetAll().ToList();
+            var mappedArticles = this.mapper.Map<IEnumerable<ArticleDisplayViewModel>>(articles);
+            return this.View(mappedArticles);
         }
     }
 }
