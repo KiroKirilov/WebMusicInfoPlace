@@ -1,0 +1,13 @@
+﻿<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Artist
+        <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" asp-area="Artist" asp-controller="Songs" asp-action="My">My Songs</a>
+        <a class="dropdown-item" asp-area="Artist" asp-controller="Albums" asp-action="My">My Albums</a>
+        <a class="dropdown-item" asp-area="Artist" asp-controller="Songs" asp-action="Create">New Song</a>
+        <a class="dropdown-item" asp-area="Artist" asp-controller="Albums" asp-action="Create">New Album</a>
+        <a class="dropdown-item" asp-area="Artist" asp-controller="Approval" asp-action="MyRequests">My Approval Requests</a>
+    </div>
+</li>
