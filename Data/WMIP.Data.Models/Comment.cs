@@ -11,7 +11,7 @@ namespace WMIP.Data.Models
             : base()
         { }
 
-        public int CommentedOnId { get; set; }
+        public int? CommentedOnId { get; set; }
         public virtual Post CommentedOn { get; set; }
     }
 }

@@ -10,5 +10,7 @@ namespace WMIP.Data.Models
         public Article()
             : base()
         { }
+
+        public string Summary { get; set; }
     }
 }

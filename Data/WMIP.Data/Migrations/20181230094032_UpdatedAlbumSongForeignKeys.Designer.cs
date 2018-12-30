@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMIP.Data;
 
 namespace WMIP.Data.Migrations
 {
     [DbContext(typeof(WmipDbContext))]
-    partial class WmipDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181230094032_UpdatedAlbumSongForeignKeys")]
+    partial class UpdatedAlbumSongForeignKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,11 +168,11 @@ namespace WMIP.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AlbumId");
+                    b.Property<int?>("AlbumId");
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<int>("SongId");
+                    b.Property<int?>("SongId");
 
                     b.HasKey("Id");
 
@@ -426,13 +428,11 @@ namespace WMIP.Data.Migrations
                 {
                     b.HasOne("WMIP.Data.Models.Album", "Album")
                         .WithMany("AlbumsSongs")
-                        .HasForeignKey("AlbumId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AlbumId");
 
                     b.HasOne("WMIP.Data.Models.Song", "Song")
                         .WithMany("AlbumsSongs")
-                        .HasForeignKey("SongId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SongId");
                 });
 
             modelBuilder.Entity("WMIP.Data.Models.Rating", b =>

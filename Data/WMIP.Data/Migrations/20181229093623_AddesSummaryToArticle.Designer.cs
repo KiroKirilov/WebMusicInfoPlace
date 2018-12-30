@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMIP.Data;
 
 namespace WMIP.Data.Migrations
 {
     [DbContext(typeof(WmipDbContext))]
-    partial class WmipDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181229093623_AddesSummaryToArticle")]
+    partial class AddesSummaryToArticle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -335,7 +337,7 @@ namespace WMIP.Data.Migrations
                 {
                     b.HasBaseType("WMIP.Data.Models.Common.Post");
 
-                    b.Property<int?>("CommentedOnId");
+                    b.Property<int>("CommentedOnId");
 
                     b.HasIndex("CommentedOnId");
 
@@ -351,7 +353,7 @@ namespace WMIP.Data.Migrations
                 {
                     b.HasBaseType("WMIP.Data.Models.Common.Post");
 
-                    b.Property<int?>("AlbumId");
+                    b.Property<int>("AlbumId");
 
                     b.Property<int>("ReviewScore");
 
@@ -465,7 +467,8 @@ namespace WMIP.Data.Migrations
                 {
                     b.HasOne("WMIP.Data.Models.Common.Post", "CommentedOn")
                         .WithMany("Comments")
-                        .HasForeignKey("CommentedOnId");
+                        .HasForeignKey("CommentedOnId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WMIP.Data.Models.User", "User")
                         .WithMany("Comments")

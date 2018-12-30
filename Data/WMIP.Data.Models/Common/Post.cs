@@ -16,6 +16,8 @@ namespace WMIP.Data.Models.Common
 
         public string Body { get; set; }
 
+        public string Discriminator { get; set; }
+
         public string UserId { get; set; }
         public virtual User User { get; set; }
 

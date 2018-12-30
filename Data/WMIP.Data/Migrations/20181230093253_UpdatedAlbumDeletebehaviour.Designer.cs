@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMIP.Data;
 
 namespace WMIP.Data.Migrations
 {
     [DbContext(typeof(WmipDbContext))]
-    partial class WmipDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181230093253_UpdatedAlbumDeletebehaviour")]
+    partial class UpdatedAlbumDeletebehaviour
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -351,7 +353,7 @@ namespace WMIP.Data.Migrations
                 {
                     b.HasBaseType("WMIP.Data.Models.Common.Post");
 
-                    b.Property<int?>("AlbumId");
+                    b.Property<int>("AlbumId");
 
                     b.Property<int>("ReviewScore");
 

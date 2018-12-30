@@ -28,9 +28,11 @@ namespace WMIP.Data
                 .ToTable("Posts")
                 .HasMany(e => e.Comments)
                 .WithOne(x => x.CommentedOn)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.Entity<User>().HasMany(p => p.Roles).WithOne().HasForeignKey(p => p.UserId).IsRequired();
+
+            builder.Entity<Album>().HasMany(a => a.Reviews).WithOne(r => r.Album).HasForeignKey(r => r.AlbumId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace WMIP.Data.Models
 
         public ReviewType ReviewType { get; set; }
 
-        public int AlbumId { get; set; }
+        public int? AlbumId { get; set; }
         public virtual Album Album { get; set; }
     }
 }
