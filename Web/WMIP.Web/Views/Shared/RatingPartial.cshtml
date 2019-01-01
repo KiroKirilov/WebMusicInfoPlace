@@ -1,0 +1,44 @@
+﻿@model RatingViewModel
+
+@if (this.ViewData["UseHorizontal"] != null && this.ViewData["UseHorizontal"] as bool? == true)
+{
+    <div class="col-md-1">
+        <div class="min-100">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="diplay-inline" data-id="@Model.PostId" data-action="up">
+                    <span class="glyphicon glyphicon-chevron-up mouse-pointer"></span>
+                </div>
+            }
+            <div class="diplay-inline" data-id="@Model.PostId" data-action="ratingsCount">@Model.Score</div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="diplay-inline" data-id="@Model.PostId" data-action="down">
+                    <span class="glyphicon glyphicon-chevron-down mouse-pointer"></span>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-md-1">
+        <div class="text-center">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="row" data-id="@Model.PostId" data-action="up">
+                    <span class="glyphicon glyphicon-chevron-up mouse-pointer"></span>
+                </div>
+            }
+            <div class="row" data-id="@Model.PostId" data-action="ratingsCount">@Model.Score</div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="row" data-id="@Model.PostId" data-action="down">
+                    <span class="glyphicon glyphicon-chevron-down mouse-pointer"></span>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<script src="~/js/rating-script.js"></script>
