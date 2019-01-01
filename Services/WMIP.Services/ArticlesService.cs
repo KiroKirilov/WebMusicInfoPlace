@@ -5,6 +5,7 @@ using System.Text;
 using WMIP.Data;
 using WMIP.Data.Models;
 using WMIP.Services.Contracts;
+using WMIP.Services.Dtos.Articles;
 
 namespace WMIP.Services
 {
@@ -17,16 +18,16 @@ namespace WMIP.Services
             this.context = context;
         }
 
-        public bool CreateNew(string title, string body, string summary, string userId)
+        public bool Create(CreateDto creationInfo)
         {
             try
             {
                 var article = new Article
                 {
-                    Title = title,
-                    Body = body,
-                    Summary = summary,
-                    UserId = userId,
+                    Title = creationInfo.Title,
+                    Body = creationInfo.Body,
+                    Summary = creationInfo.Summary,
+                    UserId = creationInfo.UserId,
                 };
 
                 this.context.Articles.Add(article);
@@ -63,18 +64,18 @@ namespace WMIP.Services
             }
         }
 
-        public bool Edit(int articleId, string title, string body, string summary)
+        public bool Edit(EditPostDto editInfo)
         {
             try
             {
-                var article = this.context.Articles.Find(articleId);
+                var article = this.context.Articles.Find(editInfo.Id);
                 if (article == null)
                 {
                     return false;
                 }
-                article.Title = title;
-                article.Body = body;
-                article.Summary = summary;
+                article.Title = editInfo.Title;
+                article.Body = editInfo.Body;
+                article.Summary = editInfo.Summary;
                 this.context.Articles.Update(article);
                 this.context.SaveChanges();
                 return true;

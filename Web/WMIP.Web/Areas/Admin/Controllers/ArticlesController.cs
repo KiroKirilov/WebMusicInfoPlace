@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WMIP.Constants;
 using WMIP.Services.Contracts;
+using WMIP.Services.Dtos.Articles;
 using WMIP.Web.Areas.Admin.Models.Articles;
 
 namespace WMIP.Web.Areas.Admin.Controllers
@@ -44,13 +45,16 @@ namespace WMIP.Web.Areas.Admin.Controllers
                 this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find user");
                 return this.View(model);
             }
+            
+            var creationInfo = this.mapper.Map<CreateDto>(model);
+            creationInfo.UserId = userId;
 
-            var creationResult = this.articlesSerivce.CreateNew(model.Title, model.Body, model.Summary, userId);
+            var creationResult = this.articlesSerivce.Create(creationInfo);
 
             if (creationResult)
             {
                 this.TempData["Success"] = string.Format(GenericMessages.SuccessfullyDidSomething, "created article");
-                return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
+                return this.RedirectToAction("Management", "Articles");
             }
             
             this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "create article");
@@ -83,8 +87,9 @@ namespace WMIP.Web.Areas.Admin.Controllers
                 return this.View(model);
             }
 
-            var editResult = this.articlesSerivce.Edit(
-                model.Id, model.Title, model.Body, model.Summary);
+            var editInfo = this.mapper.Map<EditPostDto>(model);
+
+            var editResult = this.articlesSerivce.Edit(editInfo);
 
             if (editResult)
             {

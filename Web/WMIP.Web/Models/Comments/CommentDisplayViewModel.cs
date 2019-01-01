@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WMIP.Data.Models;
+using WMIP.Data.Models.Enums;
 
 namespace WMIP.Web.Models.Comments
 {
@@ -18,9 +19,11 @@ namespace WMIP.Web.Models.Comments
 
         public string Author { get; set; }
 
-        public string CurrentUserId { get; set; }
-
         public DateTime CreatedOn { get; set; }
+
+        public int Score { get; set; }
+
+        public RatingType UserRating { get; set; }
 
         public IEnumerable<CommentDisplayViewModel> Replies { get; set; }
 
@@ -28,7 +31,8 @@ namespace WMIP.Web.Models.Comments
         {
             configuration.CreateMap<Comment, CommentDisplayViewModel>()
                 .ForMember(m => m.Author, opts => opts.MapFrom(e => e.User.UserName))
-                .ForMember(m => m.Replies, opts => opts.MapFrom(e => e.Comments.OrderByDescending(c => c.CreatedOn)));
+                .ForMember(m => m.Replies, opts => opts.MapFrom(e => e.Comments.OrderByDescending(c => c.CreatedOn)))
+                .ForMember(m => m.Score, opts => opts.MapFrom(e => e.Ratings.Sum(r => (int)r.RatingType)));
         }
     }
 }

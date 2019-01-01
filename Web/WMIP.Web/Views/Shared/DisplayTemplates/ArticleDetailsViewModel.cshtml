@@ -1,6 +1,7 @@
 ﻿@model WMIP.Web.Models.Articles.ArticleDetailsViewModel
 
 <div class="text-center">
+    <partial name="RatingPartial" model="new RatingViewModel { PostId = Model.Id, Score = Model.Score }" />
     <h1 class="font-weight-bold">@Model.Title</h1>
     <h6>an article by: @Model.AuthorName</h6>
     <h6>written on: @Model.CreatedOn.ToShortDateString(), @Model.CreatedOn.ToShortTimeString()</h6>

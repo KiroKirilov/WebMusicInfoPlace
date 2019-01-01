@@ -3,20 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using WMIP.Data.Models;
+using WMIP.Services.Contracts.Common;
+using WMIP.Services.Dtos.Articles;
 
 namespace WMIP.Services.Contracts
 {
-    public interface IArticlesService
+    public interface IArticlesService : ICrudableEntityService<CreateDto, EditPostDto, Article, int>
     {
-        bool CreateNew(string title, string body, string summary, string userId);
-
-        bool Edit(int articleId, string title, string body, string summary);
-
-        bool Delete(int articleId);
-
         IEnumerable<Article> GetLatest(int count);
-
-        Article GetById(int articleId);
 
         IQueryable<Article> GetAll();
     }

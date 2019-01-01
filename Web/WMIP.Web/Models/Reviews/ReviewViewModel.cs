@@ -1,13 +1,16 @@
-﻿using System;
+﻿using AutoMapper;
+using NewsSystem.Common.Mapping.Contracts;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using WMIP.Constants;
+using WMIP.Services.Dtos.Reviews;
 
 namespace WMIP.Web.Models.Reviews
 {
-    public class CreateReviewViewModel
+    public class ReviewViewModel : IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -33,5 +36,11 @@ namespace WMIP.Web.Models.Reviews
 
         [Required]
         public string AlbumName { get; set; }
+
+        public void CreateMappings(IMapperConfigurationExpression configuration)
+        {
+            configuration.CreateMap<ReviewViewModel, CreateReviewDto>();
+            configuration.CreateMap<ReviewViewModel, EditReviewDto>();
+        }
     }
 }

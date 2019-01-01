@@ -1,13 +1,15 @@
-﻿using System;
+﻿using NewsSystem.Common.Mapping.Contracts;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using WMIP.Constants;
+using WMIP.Services.Dtos.Articles;
 
 namespace WMIP.Web.Areas.Admin.Models.Articles
 {
-    public class ArticleViewModel
+    public class ArticleViewModel : IMapTo<CreateDto>
     {
         public int Id { get; set; }
 

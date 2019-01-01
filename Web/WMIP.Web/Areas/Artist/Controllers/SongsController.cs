@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using WMIP.Constants;
 using WMIP.Services.Contracts;
+using WMIP.Services.Dtos.Songs;
 using WMIP.Web.Areas.Artist.Models.Songs;
 
 namespace WMIP.Web.Areas.Artist.Controllers
@@ -43,8 +44,10 @@ namespace WMIP.Web.Areas.Artist.Controllers
                 return this.View(model);
             }
 
-            var creationResult = this.songsService.CreateNew(
-                model.Name, model.Genre, model.ReleaseDate, model.ReleaseStage, model.TrackNumber, model.MusicVideoLink, model.Lyrics, userId);
+            var creationInfo = this.mapper.Map<CreateSongDto>(model);
+            creationInfo.ArtistId = userId;
+
+            var creationResult = this.songsService.Create(creationInfo);
 
             if (creationResult)
             {
@@ -85,7 +88,7 @@ namespace WMIP.Web.Areas.Artist.Controllers
                 this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find user");
                 return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
             }
-            var userCanEditItem = this.songsService.IsUserCreator(userId, id.Value);
+            var userCanEditItem = this.songsService.IsUserCreatorById(userId, id.Value);
 
             if (!userCanEditItem)
             {
@@ -117,7 +120,7 @@ namespace WMIP.Web.Areas.Artist.Controllers
                 return this.View(model);
             }
 
-            var userCanEditItem = this.songsService.IsUserCreator(userId, model.Id.Value);
+            var userCanEditItem = this.songsService.IsUserCreatorById(userId, model.Id.Value);
 
             if (!userCanEditItem)
             {
@@ -125,8 +128,9 @@ namespace WMIP.Web.Areas.Artist.Controllers
                 return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
             }
 
-            var editResult = this.songsService.Edit(
-                model.Id.Value, model.Name, model.Genre, model.ReleaseDate, model.ReleaseStage, model.TrackNumber, model.MusicVideoLink, model.Lyrics);
+            var editInfo = this.mapper.Map<EditSongDto>(model);
+
+            var editResult = this.songsService.Edit(editInfo);
 
             if (editResult)
             {
@@ -152,7 +156,7 @@ namespace WMIP.Web.Areas.Artist.Controllers
                 this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find user");
                 return this.Redirect(Url.Action("Index", "Home", new { area = "" }));
             }
-            var userIsCreator = this.songsService.IsUserCreator(userId, id.Value);
+            var userIsCreator = this.songsService.IsUserCreatorById(userId, id.Value);
 
             if (!userIsCreator)
             {
@@ -179,7 +183,7 @@ namespace WMIP.Web.Areas.Artist.Controllers
                 return this.View(model);
             }
 
-            var userIsCreator = this.songsService.IsUserCreator(userId, model.Id.Value);
+            var userIsCreator = this.songsService.IsUserCreatorById(userId, model.Id.Value);
 
             if (!userIsCreator)
             {

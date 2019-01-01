@@ -13,10 +13,11 @@
         .Grid(Model)
         .Build(columns =>
         {
-            columns.Add(review => review.Title).Titled("Title");
-            columns.Add(review => review.PostTitle ?? "[deleted]").Titled("Post Title");
-            columns.Add(review => review.PostType).Titled("Post Type");
-            columns.Add(review => $"{review.CreatedOn.ToShortDateString()} {review.CreatedOn.ToShortTimeString()}").Titled("Created On");
+            columns.Add(comment => comment.Title).Titled("Title");
+            columns.Add(comment => comment.Score).Titled("Score");
+            columns.Add(comment => comment.PostTitle ?? "[deleted]").Titled("Post Title");
+            columns.Add(comment => comment.PostType).Titled("Post Type");
+            columns.Add(comment => $"{comment.CreatedOn.ToShortDateString()} {comment.CreatedOn.ToShortTimeString()}").Titled("Created On");
         })
         .Empty("No comments")
         .Filterable()
@@ -29,9 +30,5 @@
 
 @section Scripts {
     <script src="~/js/mvc-grid.js"></script>
-    <script>
-        [].forEach.call(document.getElementsByClassName('mvc-grid'), function (element) {
-            new MvcGrid(element);
-        });
-    </script>
+    <script src="~/js/initialize-mvc-grid.js"></script>
 }

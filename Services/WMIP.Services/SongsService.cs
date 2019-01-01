@@ -6,6 +6,7 @@ using WMIP.Data;
 using WMIP.Data.Models;
 using WMIP.Data.Models.Enums;
 using WMIP.Services.Contracts;
+using WMIP.Services.Dtos.Songs;
 
 namespace WMIP.Services
 {
@@ -18,20 +19,20 @@ namespace WMIP.Services
             this.context = context;
         }
 
-        public bool CreateNew(string name, string genre, DateTime? releaseDate, ReleaseStage releaseStage, int trackNumber, string mvLink, string lyrics, string artistId)
+        public bool Create(CreateSongDto creationInfo)
         {
             try
             {
                 var song = new Song
                 {
-                    Name = name,
-                    Genre = genre,
-                    ReleaseDate = releaseDate,
-                    ReleaseStage = releaseStage,
-                    TrackNumber = trackNumber,
-                    MusicVideoLink = mvLink,
-                    Lyrics = lyrics,
-                    ArtistId = artistId,
+                    Name = creationInfo.Name,
+                    Genre = creationInfo.Genre,
+                    ReleaseDate = creationInfo.ReleaseDate,
+                    ReleaseStage = creationInfo.ReleaseStage,
+                    TrackNumber = creationInfo.TrackNumber,
+                    MusicVideoLink = creationInfo.MusicVideoLink,
+                    Lyrics = creationInfo.Lyrics,
+                    ArtistId = creationInfo.ArtistId,
                     ApprovalStatus = ApprovalStatus.Pending
                 };
 
@@ -60,23 +61,23 @@ namespace WMIP.Services
             }
         }
 
-        public bool Edit(int sondId, string name, string genre, DateTime? releaseDate, ReleaseStage releaseStage, int trackNumber, string mvLink, string lyrics)
+        public bool Edit(EditSongDto editInfo)
         {
             try
             {
-                var song = this.context.Songs.Find(sondId);
+                var song = this.context.Songs.Find(editInfo.Id);
                 if (song == null)
                 {
                     return false;
                 }
 
-                song.Name = name;
-                song.Genre = genre;
-                song.ReleaseDate = releaseDate;
-                song.ReleaseStage = releaseStage;
-                song.TrackNumber = trackNumber;
-                song.MusicVideoLink = mvLink;
-                song.Lyrics = lyrics;
+                song.Name = editInfo.Name;
+                song.Genre = editInfo.Genre;
+                song.ReleaseDate = editInfo.ReleaseDate;
+                song.ReleaseStage = editInfo.ReleaseStage;
+                song.TrackNumber = editInfo.TrackNumber;
+                song.MusicVideoLink = editInfo.MusicVideoLink;
+                song.Lyrics = editInfo.Lyrics;
                 song.ApprovalStatus = ApprovalStatus.Pending;
                 song.AlbumsSongs.Clear();
 
@@ -119,11 +120,14 @@ namespace WMIP.Services
             return songs;
         }
 
-        public bool IsUserCreator(string userId, int songId)
+        public bool IsUserCreatorById(string userId, int songId)
         {
-            var song = this.context.Songs.FirstOrDefault(s => s.Id == songId && s.ArtistId == userId);
+            return this.context.Songs.Any(s => s.Id == songId && s.ArtistId == userId);
+        }
 
-            return song != null;
+        public bool IsUserCreatorByName(string username, int songId)
+        {
+            return this.context.Songs.Any(s => s.Id == songId && s.Artist.UserName == username);
         }
     }
 }

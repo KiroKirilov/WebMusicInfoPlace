@@ -8,7 +8,9 @@
 
 @Html.DisplayForModel()
 
-@Html.Partial("NewCommentPartial", new NewCommentViewModel { PostId = Model.Id, Type = "comment" })
+<div class="row">
+    @Html.Partial("NewCommentPartial", new NewCommentViewModel { PostId = Model.Id, Type = "comment" })
+</div>
 
 @if (Model.Comments != null && Model.Comments.Count() > 0)
 {

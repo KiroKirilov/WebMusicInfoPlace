@@ -1,7 +1,6 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
 for details on configuring this project to bundle and minify static web assets. */
 body {
-    padding-top: 50px;
     padding-bottom: 20px;
 }
 
@@ -143,6 +142,10 @@ input[type=date] {
     padding: 5px;
     border-radius: 5px;
     border: 1px solid black;
+}
+
+.newCommentsContainer {
+    margin-left: 0px;
 }
 
 .commentReply, .newCommentsContainer {
@@ -318,5 +321,18 @@ input[type=date] {
 }
 
 .abolute-important {
-    position: absolute !important;  
+    position: initial !important;  
+    margin-bottom: 0px;
+}
+
+.diplay-inline {
+    display: inline !important;
+}
+
+.min-100 {
+    min-width: 100px;
+}
+
+.mouse-pointer {
+    cursor: pointer;
 }

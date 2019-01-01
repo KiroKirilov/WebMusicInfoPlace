@@ -6,6 +6,7 @@ using WMIP.Data;
 using WMIP.Data.Models;
 using WMIP.Data.Models.Enums;
 using WMIP.Services.Contracts;
+using WMIP.Services.Dtos.Reviews;
 
 namespace WMIP.Services
 {
@@ -18,19 +19,19 @@ namespace WMIP.Services
             this.context = context;
         }
 
-        public bool CreateNew(string title, string body, string summary, int reviewScore, int albumId, string userId, ReviewType reviewType)
+        public bool Create(CreateReviewDto creationInfo)
         {
             try
             {
                 var review = new Review
                 {
-                    Title = title,
-                    Body = body,
-                    Summary = summary,
-                    ReviewScore = reviewScore,
-                    ReviewType = reviewType,
-                    AlbumId = albumId,
-                    UserId = userId,
+                    Title = creationInfo.Title,
+                    Body = creationInfo.Body,
+                    Summary = creationInfo.Summary,
+                    ReviewScore = creationInfo.ReviewScore,
+                    ReviewType = creationInfo.ReviewType,
+                    AlbumId = creationInfo.AlbumId,
+                    UserId = creationInfo.UserId,
                 };
 
                 this.context.Reviews.Add(review);
@@ -67,20 +68,20 @@ namespace WMIP.Services
             }
         }
 
-        public bool Edit(int reviewId, string title, string body, string summary, int reviewScore, ReviewType reviewType)
+        public bool Edit(EditReviewDto editInfo)
         {
             try
             {
-                var review = this.context.Reviews.Find(reviewId);
+                var review = this.context.Reviews.Find(editInfo.Id);
                 if (review == null)
                 {
                     return false;
                 }
-                review.Title = title;
-                review.Body = body;
-                review.Summary = summary;
-                review.ReviewScore = reviewScore;
-                review.ReviewType = reviewType;
+                review.Title = editInfo.Title;
+                review.Body = editInfo.Body;
+                review.Summary = editInfo.Summary;
+                review.ReviewScore = editInfo.ReviewScore;
+                review.ReviewType = editInfo.ReviewType;
                 this.context.Reviews.Update(review);
                 this.context.SaveChanges();
                 return true;
@@ -120,9 +121,7 @@ namespace WMIP.Services
 
         public bool IsUserCreator(string userId, int reviewId)
         {
-            var review = this.context.Reviews.FirstOrDefault(r => r.UserId == userId && r.Id == reviewId);
-
-            return review != null;
+            return this.context.Reviews.Any(r => r.UserId == userId && r.Id == reviewId);
         }
     }
 }

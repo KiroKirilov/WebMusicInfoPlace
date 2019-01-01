@@ -3,25 +3,17 @@ using System.Collections.Generic;
 using System.Text;
 using WMIP.Data.Models;
 using WMIP.Data.Models.Enums;
+using WMIP.Services.Contracts.Common;
+using WMIP.Services.Dtos.Songs;
 
 namespace WMIP.Services.Contracts
 {
-    public interface ISongsService
+    public interface ISongsService : IUserCreatedEntityService, ICrudableEntityService<CreateSongDto, EditSongDto, Song, int>
     {
-        bool CreateNew(string name, string genre, DateTime? releaseDate, ReleaseStage releaseStage, int trackNumber, string mvLink, string lyrics, string artistId);
-
         IEnumerable<Song> GetUsersApprovedSongs(string userId);
-
-        Song GetById(int songId);
 
         Song GetNotSecretById(int id);
 
         IEnumerable<Song> GetAllSongsByUser(string userId);
-
-        bool IsUserCreator(string userId, int songId);
-
-        bool Edit(int sondId, string name, string genre, DateTime? releaseDate, ReleaseStage releaseStage, int trackNumber, string mvLink, string lyrics);
-
-        bool Delete(int songId);
     }
 }

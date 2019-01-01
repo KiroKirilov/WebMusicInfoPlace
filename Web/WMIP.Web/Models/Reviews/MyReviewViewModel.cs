@@ -20,10 +20,13 @@ namespace WMIP.Web.Models.Reviews
 
         public DateTime CreatedOn { get; set; }
 
+        public int Score { get; set; }
+
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {
             configuration.CreateMap<Review, MyReviewViewModel>()
-                .ForMember(m => m.AlbumName, opts => opts.MapFrom(e => e.Album.Name));
+                .ForMember(m => m.AlbumName, opts => opts.MapFrom(e => e.Album.Name))
+                .ForMember(m => m.Score, opts => opts.MapFrom(e => e.Ratings.Sum(r => (int)r.RatingType)));
         }
     }
 }

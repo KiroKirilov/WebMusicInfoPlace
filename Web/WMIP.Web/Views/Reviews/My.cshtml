@@ -14,12 +14,14 @@
     .Build(columns =>
     {
         columns.Add(review => review.Title).Titled("Title");
+        columns.Add(review => review.Score).Titled("Score");
         columns.Add(review => review.AlbumName ?? "[deleted]").Titled("Album Name");
         columns.Add(review => $"{review.ReviewScore}/10").Titled("Score");
         columns.Add(review => $"{review.CreatedOn.ToShortDateString()} {review.CreatedOn.ToShortTimeString()}").Titled("Created On");
         columns.Add(review => $"<div class='buttonContainer text-center'>" +
             $"<a href='/Reviews/Edit/{review.Id}' class='btn btn-primary actionButton'>Edit</a>" +
             $"<a href='/Reviews/Delete/{review.Id}' class='btn btn-danger actionButton'>Delete</a>" +
+            $"<a href='/Reviews/Details/{review.Id}' class='btn btn-warning actionButton'>Details</a>" +
             $"</div>").Encoded(false).AppendCss("buttonContainer").Titled("Actions");
     })
     .Empty("No reviews")
@@ -33,9 +35,5 @@
 
 @section Scripts {
     <script src="~/js/mvc-grid.js"></script>
-    <script>
-        [].forEach.call(document.getElementsByClassName('mvc-grid'), function (element) {
-            new MvcGrid(element);
-        });
-    </script>
+    <script src="~/js/initialize-mvc-grid.js"></script>
 }

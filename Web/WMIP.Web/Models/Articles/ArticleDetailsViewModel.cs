@@ -21,13 +21,16 @@ namespace WMIP.Web.Models.Articles
 
         public DateTime CreatedOn { get; set; }
 
+        public int Score { get; set; }
+
         public IEnumerable<CommentDisplayViewModel> Comments { get; set; }
 
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {
             configuration.CreateMap<Article, ArticleDetailsViewModel>()
                 .ForMember(m => m.AuthorName, opts => opts.MapFrom(e => e.User.UserName))
-                .ForMember(m => m.Comments, opts => opts.MapFrom(e => e.Comments.OrderByDescending(c => c.CreatedOn)));
+                .ForMember(m => m.Comments, opts => opts.MapFrom(e => e.Comments.OrderByDescending(c => c.CreatedOn)))
+                .ForMember(m => m.Score, opts => opts.MapFrom(e => e.Ratings.Sum(r => (int)r.RatingType))); ;
         }
     }
 }

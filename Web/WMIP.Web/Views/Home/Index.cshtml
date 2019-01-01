@@ -88,6 +88,7 @@
         <div class="col-md-8">
             @if (Model.LatestArticles != null && Model.LatestArticles.Count() > 0)
             {
+                <h3 class="text-center">Most recent articles</h3>
                 @foreach (var article in Model.LatestArticles)
                 {
                     <div class="row">

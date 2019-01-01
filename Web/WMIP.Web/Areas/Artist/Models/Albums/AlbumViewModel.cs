@@ -8,12 +8,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using WMIP.Data.Models;
 using WMIP.Data.Models.Enums;
+using WMIP.Services.Dtos.Albums;
 using WMIP.Web.Areas.Artist.Models.Common;
 using WMIP.Web.Areas.Artist.Models.Songs;
 
 namespace WMIP.Web.Areas.Artist.Models.Albums
 {
-    public class AlbumViewModel : BaseMusicItemViewModel, IHaveCustomMappings
+    public class AlbumViewModel : BaseMusicItemViewModel, IHaveCustomMappings, IMapTo<CreateAlbumDto>
     {
         [Display(Name = "Link To Spotify Page")]
         public string SpotifyLink { get; set; }

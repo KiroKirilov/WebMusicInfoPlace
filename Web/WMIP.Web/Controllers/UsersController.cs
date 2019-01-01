@@ -33,6 +33,7 @@ namespace WMIP.Web.Controllers
         [HttpPost]
         public IActionResult Register(RegisterViewModel model)
         {
+            var a = this.ModelState.ValidationState;
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
@@ -66,6 +67,7 @@ namespace WMIP.Web.Controllers
 
             if (!isLogin)
             {
+                this.ModelState.AddModelError("Username", "Username and password do not match");
                 return this.View();
             }
 

@@ -9,6 +9,7 @@ using WMIP.Constants;
 using WMIP.Data.Models;
 using WMIP.Data.Models.Enums;
 using WMIP.Services.Contracts;
+using WMIP.Services.Dtos.Reviews;
 using WMIP.Web.Models.Reviews;
 
 namespace WMIP.Web.Controllers
@@ -44,7 +45,7 @@ namespace WMIP.Web.Controllers
                 return this.RedirectToAction("Index", "Home");
             }
 
-            var model = new CreateReviewViewModel
+            var model = new ReviewViewModel
             {
                 AlbumId = album.Id,
                 AlbumName = album.Name
@@ -55,7 +56,7 @@ namespace WMIP.Web.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult Create(CreateReviewViewModel model)
+        public IActionResult Create(ReviewViewModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -79,7 +80,10 @@ namespace WMIP.Web.Controllers
 
             var userRoles = this.usersService.GetRolesForUser(user);
             var reviewType = this.reviewsService.GetReviewType(userRoles);
-            var creationResult = this.reviewsService.CreateNew(model.Title, model.Body, model.Summary, model.ReviewScore.Value, model.AlbumId.Value, user.Id, reviewType);
+            var creationInfo = this.mapper.Map<CreateReviewDto>(model);
+            creationInfo.ReviewType = reviewType;
+            creationInfo.UserId = user.Id;
+            var creationResult = this.reviewsService.Create(creationInfo);
 
             if (creationResult)
             {
@@ -197,13 +201,13 @@ namespace WMIP.Web.Controllers
                 this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the review you were looking for");
                 return this.RedirectToAction("My", "Reviews");
             }
-            var model = this.mapper.Map<CreateReviewViewModel>(review);
+            var model = this.mapper.Map<ReviewViewModel>(review);
             return this.View(model);
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Edit(CreateReviewViewModel model)
+        public IActionResult Edit(ReviewViewModel model)
         {
             var user = this.usersService.GetByUsername(this.User.Identity.Name);
             if (user == null)
@@ -227,8 +231,9 @@ namespace WMIP.Web.Controllers
 
             var userRoles = this.usersService.GetRolesForUser(user);
             var reviewType = this.reviewsService.GetReviewType(userRoles);
-            var editResult = this.reviewsService.Edit(
-                model.Id, model.Title, model.Body, model.Summary, model.ReviewScore.Value, reviewType);
+            var editInfo = this.mapper.Map<EditReviewDto>(model);
+            editInfo.ReviewType = reviewType;
+            var editResult = this.reviewsService.Edit(editInfo);
 
             if (editResult)
             {
@@ -268,13 +273,13 @@ namespace WMIP.Web.Controllers
                 this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find the review you were looking for");
                 return this.RedirectToAction("My", "Reviews");
             }
-            var model = this.mapper.Map<CreateReviewViewModel>(review);
+            var model = this.mapper.Map<ReviewViewModel>(review);
             return this.View(model);
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Delete(CreateReviewViewModel model)
+        public IActionResult Delete(ReviewViewModel model)
         {
             var user = this.usersService.GetByUsername(this.User.Identity.Name);
             if (user == null)

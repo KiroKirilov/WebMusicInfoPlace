@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WMIP.Constants;
+using WMIP.Data.Models;
 using WMIP.Services.Contracts;
 using WMIP.Web.Models.Albums;
 
@@ -34,17 +35,32 @@ namespace WMIP.Web.Controllers
                 return this.RedirectToAction("Index", "Home");
             }
 
-            var album = this.albumsService.GetNotSecretById(id.Value);
+            var userIsCreator = this.albumsService.IsUserCreatorByName(this.User.Identity.Name, id.Value);
 
-            if (album == null)
+            Album album = null;
+
+            if (userIsCreator)
             {
-                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find album");
-                return this.RedirectToAction("Index", "Home");
+                album = this.albumsService.GetById(id.Value);
+                if (album == null)
+                {
+                    this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find album");
+                    return this.RedirectToAction("Index", "Home");
+                }
+                var model = this.mapper.Map<AlbumDetailsCreatorViewModel>(album);
+                return this.View(model);
             }
-
-            var model = this.mapper.Map<AlbumDetailsViewModel>(album);
-
-            return this.View(model);
+            else
+            {
+                album = this.albumsService.GetNotSecretById(id.Value);
+                if (album == null)
+                {
+                    this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find album");
+                    return this.RedirectToAction("Index", "Home");
+                }
+                var model = this.mapper.Map<AlbumDetailsViewModel>(album);
+                return this.View(model);
+            }
         }
     }
 }

@@ -33,7 +33,7 @@ namespace WMIP.Web.Models.Albums
 
         public IEnumerable<SongBasicInfoViewModel> Songs { get; set; }
 
-        public void CreateMappings(IMapperConfigurationExpression configuration)
+        public virtual void CreateMappings(IMapperConfigurationExpression configuration)
         {
             configuration.CreateMap<Album, AlbumDetailsViewModel>()
                 .ForMember(m => m.ArtistName, opts => opts.MapFrom(e => e.Artist.UserName))

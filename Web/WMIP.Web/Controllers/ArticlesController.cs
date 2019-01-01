@@ -13,11 +13,13 @@ namespace WMIP.Web.Controllers
     public class ArticlesController : Controller
     {
         private readonly IArticlesService articlesService;
+        private readonly IRatingsService ratingsService;
         private readonly IMapper mapper;
 
-        public ArticlesController(IArticlesService articlesService, IMapper mapper)
+        public ArticlesController(IArticlesService articlesService, IRatingsService ratingsService, IMapper mapper)
         {
             this.articlesService = articlesService;
+            this.ratingsService = ratingsService;
             this.mapper = mapper;
         }
 

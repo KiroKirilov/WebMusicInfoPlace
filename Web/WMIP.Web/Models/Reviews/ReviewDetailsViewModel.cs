@@ -30,6 +30,8 @@ namespace WMIP.Web.Models.Reviews
 
         public string ReviewerName { get; set; }
 
+        public int Score { get; set; }
+
         public IEnumerable<CommentDisplayViewModel> Comments { get; set; }
 
         public void CreateMappings(IMapperConfigurationExpression configuration)
@@ -37,7 +39,8 @@ namespace WMIP.Web.Models.Reviews
             configuration.CreateMap<Review, ReviewDetailsViewModel>()
                 .ForMember(m => m.AlbumName, opts => opts.MapFrom(e => e.Album.Name))
                 .ForMember(m => m.ReviewerName, opts => opts.MapFrom(e => e.User.UserName))
-                .ForMember(m => m.Comments, opts => opts.MapFrom(e => e.Comments.OrderByDescending(c => c.CreatedOn)));
+                .ForMember(m => m.Comments, opts => opts.MapFrom(e => e.Comments.OrderByDescending(c => c.CreatedOn)))
+                .ForMember(m => m.Score, opts => opts.MapFrom(e => e.Ratings.Sum(r => (int)r.RatingType)));
         }
     }
 }

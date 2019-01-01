@@ -37,18 +37,18 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Articles" asp-action="All">All Articles</a></li>
                     @if (this.User != null && this.User.Identity.IsAuthenticated)
-        {
-            Html.RenderPartial("LoggedInNavigation");
-        }
+                    {
+                        Html.RenderPartial("LoggedInNavigation");
+                    }
                     @if (this.User != null && this.User.IsInRole("Admin"))
-        {
-            Html.RenderPartial("AdminNavigation");
-        }
+                    {
+                        Html.RenderPartial("AdminNavigation");
+                    }
 
                     @if (this.User != null && this.User.IsInRole("Artist"))
-        {
-            Html.RenderPartial("ArtistNavigation");
-        }
+                    {
+                        Html.RenderPartial("ArtistNavigation");
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
                 @Html.Partial("SearchPartial")
@@ -86,6 +86,7 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
+    <partial name="_ValidationScriptsPartial" />
     <script>
         toastr.options.positionClass = "toast-bottom-center";
 

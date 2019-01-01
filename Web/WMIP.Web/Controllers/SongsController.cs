@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WMIP.Constants;
+using WMIP.Data.Models;
 using WMIP.Services.Contracts;
 using WMIP.Web.Models.Songs;
 
@@ -29,16 +30,31 @@ namespace WMIP.Web.Controllers
                 return this.RedirectToAction("Index", "Home");
             }
 
-            var song = this.songsService.GetNotSecretById(id.Value);
-            if (song == null)
+            var userIsCreator = this.songsService.IsUserCreatorByName(this.User.Identity.Name, id.Value);
+
+            Song song = null;
+            if (userIsCreator)
             {
-                this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find song");
-                return this.RedirectToAction("Index", "Home");
+                song = this.songsService.GetById(id.Value);
+                if (song == null)
+                {
+                    this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find song");
+                    return this.RedirectToAction("Index", "Home");
+                }
+                var model = this.mapper.Map<SongDetailsCreatorViewModel>(song);
+                return this.View(model);
             }
-
-            var model = this.mapper.Map<SongDetailsViewModel>(song);
-
-            return this.View(model);
+            else
+            {
+                song = this.songsService.GetNotSecretById(id.Value);
+                if (song == null)
+                {
+                    this.TempData["Error"] = string.Format(GenericMessages.CouldntDoSomething, "find song");
+                    return this.RedirectToAction("Index", "Home");
+                }
+                var model = this.mapper.Map<SongDetailsViewModel>(song);
+                return this.View(model);
+            }
         }
     }
 }

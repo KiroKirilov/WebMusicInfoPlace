@@ -57,6 +57,7 @@ namespace WMIP.Web
             services.AddTransient<IReviewsService, ReviewsService>();
             services.AddTransient<ICommentsService, CommentsService>();
             services.AddTransient<ISearchService, SearchService>();
+            services.AddTransient<IRatingsService, RatingsService>();
 
             // Configure AutoMapper
             var mapperConfigBuilder = new MapperConfigBuilder();

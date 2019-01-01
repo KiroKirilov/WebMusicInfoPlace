@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WMIP.Data.Models;
+using WMIP.Data.Models.Enums;
 using WMIP.Web.Models.Albums;
 
 namespace WMIP.Web.Models.Songs
@@ -25,11 +26,13 @@ namespace WMIP.Web.Models.Songs
 
         public IEnumerable<AlbumBasicInfoViewModel> Albums { get; set; }
 
-        public void CreateMappings(IMapperConfigurationExpression configuration)
+        public virtual void CreateMappings(IMapperConfigurationExpression configuration)
         {
             configuration.CreateMap<Song, SongDetailsViewModel>()
                 .ForMember(m => m.ArtistName, opts => opts.MapFrom(e => e.Artist.UserName))
-                .ForMember(m => m.Albums, opts => opts.MapFrom(e => e.AlbumsSongs.Select(a => a.Album)));
+                .ForMember(m => m.Albums, opts => opts.MapFrom(e => e.AlbumsSongs
+                    .Where(a => a.Album.ApprovalStatus == ApprovalStatus.Approved && a.Album.ReleaseStage != ReleaseStage.Secret)
+                    .Select(a => a.Album)));
         }
     }
 }

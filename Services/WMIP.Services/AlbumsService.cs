@@ -19,46 +19,6 @@ namespace WMIP.Services
             this.context = context;
         }
 
-        public bool CreateNew(
-            string name, string genre, DateTime? releaseDate, ReleaseStage releaseStage, string spotifyLink, string albumCoverLink, IEnumerable<int> selectedSongIds, string artistId)
-        {
-            try
-            {
-                var album = new Album
-                {
-                    Name = name,
-                    Genre = genre,
-                    ReleaseDate = releaseDate,
-                    ReleaseStage = releaseStage,
-                    SpotifyLink = spotifyLink,
-                    AlbumCoverLink = albumCoverLink,
-                    ArtistId = artistId,
-                    ApprovalStatus = ApprovalStatus.Pending
-                };
-
-                if (selectedSongIds != null)
-                {
-                    foreach (var songId in selectedSongIds)
-                    {
-                        var currentAlbumSong = new AlbumSong
-                        {
-                            SongId = songId,
-                        };
-
-                        album.AlbumsSongs.Add(currentAlbumSong);
-                    }
-                }
-
-                this.context.Albums.Add(album);
-                this.context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
         public bool DoesAlbumExist(int albumId, string albumName)
         {
             var album = this.context.Albums.FirstOrDefault(a => a.Name == albumName && a.Id == albumId);
@@ -66,30 +26,30 @@ namespace WMIP.Services
             return album != null;
         }
 
-        public bool Edit(int albumId, string name, string genre, DateTime? releaseDate, ReleaseStage releaseStage, string spotifyLink, string albumCoverLink, IEnumerable<int> selectedSongIds)
+        public bool Edit(EditAlbumDto editInfo)
         {
             try
             {
-                var album = this.context.Albums.Find(albumId);
+                var album = this.context.Albums.Find(editInfo.Id);
                 if (album == null)
                 {
                     return false;
                 }
 
-                album.Name = name;
-                album.Genre = genre;
-                album.ReleaseDate = releaseDate;
-                album.ReleaseStage = releaseStage;
-                album.SpotifyLink = spotifyLink;
-                album.AlbumCoverLink = albumCoverLink;
+                album.Name = editInfo.Name;
+                album.Genre = editInfo.Genre;
+                album.ReleaseDate = editInfo.ReleaseDate;
+                album.ReleaseStage = editInfo.ReleaseStage;
+                album.SpotifyLink = editInfo.SpotifyLink;
+                album.AlbumCoverLink = editInfo.AlbumCoverLink;
                 album.ApprovalStatus = ApprovalStatus.Pending;
                 album.AlbumsSongs.Clear();
 
-                if (selectedSongIds != null)
+                if (editInfo.SelectedSongIds != null)
                 {
-                    foreach (var songId in selectedSongIds)
+                    foreach (var songId in editInfo.SelectedSongIds)
                     {
-                        var currentAlbumSong = this.context.AlbumsSongs.FirstOrDefault(s => s.SongId == songId && s.AlbumId == albumId);
+                        var currentAlbumSong = this.context.AlbumsSongs.FirstOrDefault(s => s.SongId == songId && s.AlbumId == editInfo.Id);
                         if (currentAlbumSong == null)
                         {
                             currentAlbumSong = new AlbumSong
@@ -152,11 +112,9 @@ namespace WMIP.Services
                 .ToList();
         }
 
-        public bool IsUserCreator(string userId, int albumId)
+        public bool IsUserCreatorById(string userId, int albumId)
         {
-            var album = this.context.Albums.FirstOrDefault(a => a.Id == albumId && a.ArtistId == userId);
-
-            return album != null;
+            return this.context.Albums.Any(a => a.Id == albumId && a.ArtistId == userId);
         }
 
         public IEnumerable<Album> GetAllAlbumsByUser(string userId)
@@ -203,6 +161,50 @@ namespace WMIP.Services
         {
             var album = this.context.Albums.FirstOrDefault(a => a.Id == id && a.ReleaseStage != ReleaseStage.Secret && a.ApprovalStatus == ApprovalStatus.Approved);
             return album;
+        }
+
+        public bool IsUserCreatorByName(string username, int albumId)
+        {
+            return this.context.Albums.Any(a => a.Id == albumId && a.Artist.UserName == username);
+        }
+
+        public bool Create(CreateAlbumDto creationInfo)
+        {
+            try
+            {
+                var album = new Album
+                {
+                    Name = creationInfo.Name,
+                    Genre = creationInfo.Genre,
+                    ReleaseDate = creationInfo.ReleaseDate,
+                    ReleaseStage = creationInfo.ReleaseStage,
+                    SpotifyLink = creationInfo.SpotifyLink,
+                    AlbumCoverLink = creationInfo.AlbumCoverLink,
+                    ArtistId = creationInfo.ArtistId,
+                    ApprovalStatus = ApprovalStatus.Pending
+                };
+
+                if (creationInfo.SelectedSongIds != null)
+                {
+                    foreach (var songId in creationInfo.SelectedSongIds)
+                    {
+                        var currentAlbumSong = new AlbumSong
+                        {
+                            SongId = songId,
+                        };
+
+                        album.AlbumsSongs.Add(currentAlbumSong);
+                    }
+                }
+
+                this.context.Albums.Add(album);
+                this.context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using WMIP.Constants.Enums;
 using WMIP.Data;
+using WMIP.Data.Models.Enums;
 using WMIP.Services.Contracts;
 using WMIP.Services.Dtos.Search;
 
@@ -31,10 +32,10 @@ namespace WMIP.Services
             try
             {
                 var results = this.context.Albums
-                    .Where(a => a.Name.ToLower().Contains(searchTerm))
+                    .Where(a => a.Name.ToLower().Contains(searchTerm) && a.ApprovalStatus == ApprovalStatus.Approved && a.ReleaseStage != ReleaseStage.Secret)
                     .Select(a => new SearchResultDto { Id = a.Id, Title = a.Name, SearchResultType = SearchResultType.Album })
                 .Concat(this.context.Songs
-                    .Where(s => s.Name.ToLower().Contains(searchTerm))
+                    .Where(s => s.Name.ToLower().Contains(searchTerm) && s.ApprovalStatus == ApprovalStatus.Approved && s.ReleaseStage != ReleaseStage.Secret)
                     .Select(s => new SearchResultDto { Id = s.Id, Title = s.Name, SearchResultType = SearchResultType.Song })
                 .Concat(this.context.Articles
                         .Where(a => a.Title.ToLower().Contains(searchTerm))
@@ -45,7 +46,7 @@ namespace WMIP.Services
 
                 return results;
             }
-            catch (Exception e)
+            catch
             {
                 return new List<SearchResultDto>();
             }

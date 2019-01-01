@@ -5,11 +5,12 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using WMIP.Data.Models;
+using WMIP.Services.Contracts.Common;
 using WMIP.Services.Dtos.Users;
 
 namespace WMIP.Services.Contracts
 {
-    public interface IUsersService
+    public interface IUsersService : IGettableEntityService<User, string>
     {
         Task<bool> Register(string username, string password, string confirmPassword, string email, string firstName, string lastName);
 
@@ -18,8 +19,6 @@ namespace WMIP.Services.Contracts
         void Logout();
 
         IEnumerable<UserDto> GetAllUsersWithRoles();
-
-        User GetById(string id);
 
         User GetByUsername(string username);
 

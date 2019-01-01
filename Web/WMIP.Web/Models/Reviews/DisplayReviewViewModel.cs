@@ -22,10 +22,13 @@ namespace WMIP.Web.Models.Reviews
 
         public int ReviewScore { get; set; }
 
+        public int Score { get; set; }
+
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {
             configuration.CreateMap<Review, DisplayReviewViewModel>()
-                .ForMember(m => m.Reviewer, opts => opts.MapFrom(e => e.User.UserName));
+                .ForMember(m => m.Reviewer, opts => opts.MapFrom(e => e.User.UserName))
+                .ForMember(m => m.Score, opts => opts.MapFrom(e => e.Ratings.Sum(r => (int)r.RatingType)));
         }
     }
 }
