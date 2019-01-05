@@ -18,7 +18,7 @@ namespace WMIP.Services.Dtos.Posts.Extensions
                 Body = post.Body,
                 CreatedOn = post.CreatedOn,
                 Title = post.Title,
-                Comments = post.Comments?.Select(p => p.ToDto(username)),
+                Comments = post.Comments?.ToList().OrderByDescending(p => p.CreatedOn).Select(p => p.ToDto(username)),
                 AuthorName = post.User?.UserName,
                 Score = post.Ratings.Sum(r => (int)r.RatingType),
                 CurrentUserRating = post.Ratings?.FirstOrDefault(r => !string.IsNullOrWhiteSpace(username) && r.User?.UserName == username) == null ?

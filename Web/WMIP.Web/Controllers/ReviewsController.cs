@@ -116,12 +116,12 @@ namespace WMIP.Web.Controllers
             string selectedFilter = string.Empty;
             if (reviewTypeIsValid)
             {
-                relevantReviews = album.Reviews.Where(r => r.ReviewType == parsedReviewType).Select(r => r.ToDto(this.User.Identity.Name));
+                relevantReviews = album.Reviews.Where(r => r.ReviewType == parsedReviewType).ToList().Select(r => r.ToDto(this.User.Identity.Name));
                 selectedFilter = parsedReviewType.ToString();
             }
             else
             {
-                relevantReviews = album.Reviews.Select(r => r.ToDto(this.User.Identity.Name));
+                relevantReviews = album.Reviews.ToList().Select(r => r.ToDto(this.User.Identity.Name));
                 selectedFilter = "All";
             }
 

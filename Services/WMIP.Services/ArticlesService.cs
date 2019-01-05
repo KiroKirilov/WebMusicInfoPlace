@@ -96,6 +96,7 @@ namespace WMIP.Services
         public IEnumerable<UserRatedPostDto> GetAllOrderedByDate(string username)
         {
             return this.context.Articles
+                 .ToList()
                  .Select(a => a.ToDto(username))
                  .OrderByDescending(a => a.CreatedOn)
                  .ToList();

@@ -20,7 +20,7 @@ namespace WMIP.Services.Dtos.Posts.Reviews
                 Body = review.Body,
                 CreatedOn = review.CreatedOn,
                 Title = review.Title,
-                Comments = review.Comments.Select(c => c.ToDto(username)),
+                Comments = review.Comments.ToList().Select(c => c.ToDto(username)),
                 AuthorName = review.User.UserName,
                 Score = review.Ratings.Sum(r => (int)r.RatingType),
                 CurrentUserRating = review.Ratings.FirstOrDefault(r => r.User.UserName == username) == null ?
