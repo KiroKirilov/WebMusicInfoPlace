@@ -85,7 +85,10 @@
                 </div>
             }
         </div>
-        <div class="col-md-8">
+        <div class="@(Model.ComingSoon.Count() == 0 
+            && Model.LatestReleases.Count() == 0 
+            && Model.CriticsMostAcclaimed.Count() == 0 
+            && Model.UsersMostAcclaimed.Count() == 0 ? "col-md-12" : "col-md-8")">
             @if (Model.LatestArticles != null && Model.LatestArticles.Count() > 0)
             {
                 <h3 class="text-center">Most recent articles</h3>

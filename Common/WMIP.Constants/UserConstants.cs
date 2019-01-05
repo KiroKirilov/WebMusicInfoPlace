@@ -17,5 +17,7 @@ namespace WMIP.Constants
         public const int PasswordMaxLength = 25;
 
         public const string DoNotMatchErrorMessage = "The password and confirmation password do not match.";
+
+        public const string InvalidCharactersErrorMessage = "Only latic characters, digits and the symbols '-', '_', '.', '*', '~' are allowed".
     }
 }

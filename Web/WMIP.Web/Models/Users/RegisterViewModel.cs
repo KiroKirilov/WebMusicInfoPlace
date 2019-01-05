@@ -14,7 +14,7 @@ namespace WMIP.Web.Models.Users
         [StringLength(maximumLength: UserConstants.UsernameMaxLength, 
             ErrorMessage = GenericMessages.InputStringLengthMinAndMaxErrorMessage,
             MinimumLength = UserConstants.UsernameMinLength)]
-        [RegularExpression("[a-zA-Z0-9-_.*~]+")]
+        [RegularExpression("[a-zA-Z0-9-_.*~]+", ErrorMessage = UserConstants.InvalidCharactersErrorMessage)]
         [Display(Name = "Username")]
         public string Username { get; set; }
 
