@@ -16,7 +16,7 @@
         columns.Add(review => review.Title).Titled("Title");
         columns.Add(review => review.Score).Titled("Score");
         columns.Add(review => review.AlbumName ?? "[deleted]").Titled("Album Name");
-        columns.Add(review => $"{review.ReviewScore}/10").Titled("Score");
+        columns.Add(review => $"{review.ReviewScore}/10").Titled("Review Score");
         columns.Add(review => $"{review.CreatedOn.ToShortDateString()} {review.CreatedOn.ToShortTimeString()}").Titled("Created On");
         columns.Add(review => $"<div class='buttonContainer text-center'>" +
             $"<a href='/Reviews/Edit/{review.Id}' class='btn btn-primary actionButton'>Edit</a>" +

@@ -122,7 +122,7 @@ namespace WMIP.Services
 
                 return creationResult.Succeeded;
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
@@ -142,7 +142,7 @@ namespace WMIP.Services
 
                 return assignmentResult.Succeeded;
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }

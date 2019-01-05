@@ -48,7 +48,7 @@ namespace WMIP.Services
 
                 return results;
             }
-            catch (Exception e)
+            catch
             {
                 return new List<SearchResultDto>();
             }

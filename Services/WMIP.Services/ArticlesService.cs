@@ -60,7 +60,7 @@ namespace WMIP.Services
                 this.context.SaveChanges();
                 return true;
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }

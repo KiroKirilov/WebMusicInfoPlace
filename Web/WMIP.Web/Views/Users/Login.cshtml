@@ -1,52 +1,55 @@
 ﻿@using Microsoft.AspNetCore.Authentication
-
 @model WMIP.Web.Models.Users.LoginViewModel
-
 @inject IAuthenticationSchemeProvider SchemeProvider
-
 @{
     ViewData["Title"] = "Login";
 }
-
 <h1 class="text-center">Login</h1>
 <hr class="hr-1 bg-info w50" />
-<form class="mx-auto w50" method="post" asp-action="Login">
-    <div class="form-group">
-        <label asp-for="Username"></label>
-        <input asp-for="Username" class="form-control" placeholder="Username..." />
-        <span asp-validation-for="Username" class="text-danger"></span>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <form class="mx-auto w50" method="post" asp-action="Login">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Username"></label>
+                            <input asp-for="Username" class="form-control" placeholder="Username..." />
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" class="form-control" placeholder="Password..." />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="checkbox text-center">
+                            <label asp-for="RememberMe">
+                                <input asp-for="RememberMe" />
+                                @Html.DisplayNameFor(m => m.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr-1 bg-info" />
+                <div class="button-holder text-center">
+                    <button type="submit" class="btn bg-info">Submit</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control" placeholder="Password..." />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <div class="checkbox text-center">
-        <label asp-for="RememberMe">
-            <input asp-for="RememberMe" />
-            @Html.DisplayNameFor(m => m.RememberMe)
-        </label>
-    </div>
-    <div class="button-holder d-flex justify-content-center">
-        <button type="submit" class="btn bg-info">Login</button>
-    </div>
-</form>
+</div>
+
 <br />
 <div class="text-center">
-    <a asp-controller="Accounts" asp-action="Register" class="text-info">Forgot your password?</a>
+    <a asp-controller="Users" asp-action="Register" class="text-info">Register as a new user</a>
 </div>
-<div class="text-center">
-    <a asp-controller="Accounts" asp-action="Register" class="text-info">Register as a new user</a>
-</div>
-<hr class="hr-1 bg-info w50" />
-<form asp-action="ExternalLogin" method="post" class="form-horizontal text-center">
-    <div>
-        <p>
-            @foreach (var provider in await SchemeProvider.GetRequestHandlerSchemesAsync())
-            {
-                <button type="submit" class="btn btn-info text-dark" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-            }
-        </p>
-    </div>
-</form>
-<hr class="hr-1 bg-info w50" />
