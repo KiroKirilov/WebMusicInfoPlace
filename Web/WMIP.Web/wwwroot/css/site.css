@@ -36,6 +36,7 @@ body {
 }
 
 .roleSelect {
+    width: 50%;
     max-width: 150px;
     display: inline;
     vertical-align: middle;
@@ -43,6 +44,11 @@ body {
 
 .changeRoleCell {
     width: 272px;
+}
+
+.changeRoleButton {
+    width: 50%;
+    max-width: 100px;
 }
 
 .userManagementGridCell {
@@ -55,12 +61,13 @@ input[type=date] {
 }
 
 .buttonContainer {
-    width: 175px;
+    width: 180px;
 }
 
 .actionButton {
     margin: 5px;
-    width: 77px;
+    min-width: 77px;
+    width: fit-content;
 }
 
 .Rejected {
@@ -335,4 +342,18 @@ input[type=date] {
 
 .mouse-pointer {
     cursor: pointer;
+}
+
+.upvote-color {
+    color: #FF8b60;
+}
+
+.downvote-color {
+    color: #9494FF;
+}
+
+.cut-title {
+    width: 75%;
+    overflow:hidden;
+    word-wrap: normal;
 }
