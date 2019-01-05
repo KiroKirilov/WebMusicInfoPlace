@@ -5,7 +5,9 @@ using System.Text;
 using WMIP.Data;
 using WMIP.Data.Models;
 using WMIP.Services.Contracts;
-using WMIP.Services.Dtos.Articles;
+using WMIP.Services.Dtos.Posts;
+using WMIP.Data.Models.Enums;
+using WMIP.Services.Dtos.Posts.Extensions;
 
 namespace WMIP.Services
 {
@@ -18,7 +20,7 @@ namespace WMIP.Services
             this.context = context;
         }
 
-        public bool Create(CreateDto creationInfo)
+        public bool Create(CreatePostDto creationInfo)
         {
             try
             {
@@ -91,14 +93,38 @@ namespace WMIP.Services
             return this.context.Articles;
         }
 
-        public Article GetById(int articleId)
+        public IEnumerable<UserRatedPostDto> GetAllOrderedByDate(string username)
         {
-            return this.context.Articles.Find(articleId);
+            return this.context.Articles
+                 .Select(a => a.ToDto(username))
+                 .OrderByDescending(a => a.CreatedOn)
+                 .ToList();
         }
 
-        public IEnumerable<Article> GetLatest(int count)
+        public UserRatedPostDto GetById(int articleId, string username)
         {
-            return this.context.Articles.OrderByDescending(a => a.CreatedOn).Take(count).ToList();
+            var article = this.context.Articles.Find(articleId);
+            if (article == null)
+            {
+                return null;
+            }
+
+            return article.ToDto(username);
+        }
+
+        public Article GetById(int id)
+        {
+            return this.context.Articles.Find(id);
+        }
+
+        public IEnumerable<UserRatedPostDto> GetLatest(int count, string username)
+        {
+            return this.context.Articles
+                .OrderByDescending(a => a.CreatedOn)
+                .Take(count)
+                .ToList()
+                .Select(a => a.ToDto(username));
         }
     }
 }
+

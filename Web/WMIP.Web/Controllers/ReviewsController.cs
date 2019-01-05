@@ -9,6 +9,7 @@ using WMIP.Constants;
 using WMIP.Data.Models;
 using WMIP.Data.Models.Enums;
 using WMIP.Services.Contracts;
+using WMIP.Services.Dtos.Posts.Reviews;
 using WMIP.Services.Dtos.Reviews;
 using WMIP.Web.Models.Reviews;
 
@@ -111,16 +112,16 @@ namespace WMIP.Web.Controllers
             }
 
             bool reviewTypeIsValid = Enum.TryParse(reviewType, true, out ReviewType parsedReviewType);
-            IEnumerable<Review> relevantReviews = new List<Review>();
+            IEnumerable<RatedReviewDto> relevantReviews = new List<RatedReviewDto>();
             string selectedFilter = string.Empty;
             if (reviewTypeIsValid)
             {
-                relevantReviews = album.Reviews.Where(r => r.ReviewType == parsedReviewType);
+                relevantReviews = album.Reviews.Where(r => r.ReviewType == parsedReviewType).Select(r => r.ToDto(this.User.Identity.Name));
                 selectedFilter = parsedReviewType.ToString();
             }
             else
             {
-                relevantReviews = album.Reviews;
+                relevantReviews = album.Reviews.Select(r => r.ToDto(this.User.Identity.Name));
                 selectedFilter = "All";
             }
 
@@ -152,7 +153,7 @@ namespace WMIP.Web.Controllers
                 return this.RedirectToAction("Index", "Home");
             }
 
-            var model = this.mapper.Map<ReviewDetailsViewModel>(review);
+            var model = this.mapper.Map<ReviewDetailsViewModel>(review.ToDto(this.User.Identity.Name));
 
             return this.View(model);
         }

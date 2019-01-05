@@ -3,9 +3,9 @@
 <div class="commentParent">
     <div class="commentHeader">
         @{ ViewData["UseHorizontal"] = true; }
-        <partial name="RatingPartial" model="new RatingViewModel { PostId = Model.Id, Score = Model.Score }" />
+        <partial name="RatingPartial" model="new RatingViewModel { PostId = Model.Id, Score = Model.Score, RatingType = Model.CurrentUserRating }" />
         <div class="col-md-11">
-            <h6><b>@Model.Title</b>, by @Model.Author, submitted on: @Model.CreatedOn.ToShortDateString(), @Model.CreatedOn.ToShortTimeString()</h6>
+            <h6><b>@Model.Title</b>, by @Model.AuthorName, submitted on: @Model.CreatedOn.ToShortDateString(), @Model.CreatedOn.ToShortTimeString()</h6>
             <span title="Hide" class="hideComment">-</span>
         </div>
         <div class="row">

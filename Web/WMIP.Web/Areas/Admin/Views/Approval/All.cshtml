@@ -17,10 +17,12 @@
             columns.Add(item => item.Requester).Titled("Requester");
             columns.Add(item => item.ReleaseDate).Titled("Replease Date");
             columns.Add(item => item.ReleaseStage).Titled("Release Stage");
-            columns.Add(item => $"<div class='buttonContainer'>" +
-            $"<a data-type='{item.ItemType}' data-action='Approved' data-id='{item.Id}' class='btn btn-primary actionButton'>Approve</a>" +
-            $"<a data-type='{item.ItemType}' data-action='Rejected' data-id='{item.Id}' class='btn btn-danger actionButton'>Reject</a>" +
-            $"</div>").Encoded(false).AppendCss("buttonContainer").Titled("Action");
+            columns.Add(item => Html.Partial("ApprovalPartial",
+                new WMIP.Web.Areas.Admin.Models.Approval.BasicApprovalItemViewModel
+                {
+                     ItemId = item.Id.ToString(),
+                     ItemType = Enum.Parse<WMIP.Constants.Enums.ActionItemType>(item.ItemType),
+                })).Encoded(false).AppendCss("buttonContainer").Titled("Action");
         })
         .Empty("Nothing to approve")
         .Filterable()

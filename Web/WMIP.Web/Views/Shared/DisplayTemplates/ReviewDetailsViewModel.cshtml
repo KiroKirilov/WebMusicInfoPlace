@@ -1,9 +1,9 @@
 ﻿@model WMIP.Web.Models.Reviews.ReviewDetailsViewModel
 
 <div class="text-center">
-    <partial name="RatingPartial" model="new RatingViewModel { PostId = Model.Id, Score = Model.Score }" />
+    <partial name="RatingPartial" model="new RatingViewModel { PostId = Model.Id, Score = Model.Score, RatingType = Model.CurrentUserRating }" />
     <h1 class="font-weight-bold">@Model.Title</h1>
-    <h6>a review by: @Model.ReviewerName, @Model.ReviewType</h6>
+    <h6>a review by: @Model.AuthorName, @Model.ReviewType</h6>
     <h6>written on: @Model.CreatedOn.ToShortDateString(), @Model.CreatedOn.ToShortTimeString()</h6>
     @if (Model.AlbumName == null)
     {

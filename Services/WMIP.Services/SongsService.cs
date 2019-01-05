@@ -116,7 +116,7 @@ namespace WMIP.Services
 
         public IEnumerable<Song> GetUsersApprovedSongs(string userId)
         {
-            var songs = this.context.Songs.Where(s => s.ArtistId == userId).ToList();
+            var songs = this.context.Songs.Where(s => s.ArtistId == userId && s.ApprovalStatus == ApprovalStatus.Approved).ToList();
             return songs;
         }
 

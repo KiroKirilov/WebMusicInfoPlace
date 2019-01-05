@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WMIP.Services.Dtos.Articles
+namespace WMIP.Services.Dtos.Posts
 {
     public class EditPostDto : PostCrudDto
     {

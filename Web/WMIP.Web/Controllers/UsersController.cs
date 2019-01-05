@@ -39,8 +39,7 @@ namespace WMIP.Web.Controllers
                 return this.View(model);
             }
 
-            var isRegister = this.userService.Register(model.Username, model.Password, model.ConfirmPassword, model.Email,
-                model.FirstName, model.LastName).GetAwaiter().GetResult();
+            var isRegister = this.userService.Register(model.Username, model.Password, model.Email).GetAwaiter().GetResult();
 
             if (!isRegister)
             {

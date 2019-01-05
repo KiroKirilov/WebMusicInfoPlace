@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WMIP.Constants;
 using WMIP.Services.Contracts;
-using WMIP.Services.Dtos.Articles;
+using WMIP.Services.Dtos.Posts;
 using WMIP.Web.Areas.Admin.Models.Articles;
 
 namespace WMIP.Web.Areas.Admin.Controllers
@@ -46,7 +46,7 @@ namespace WMIP.Web.Areas.Admin.Controllers
                 return this.View(model);
             }
             
-            var creationInfo = this.mapper.Map<CreateDto>(model);
+            var creationInfo = this.mapper.Map<CreatePostDto>(model);
             creationInfo.UserId = userId;
 
             var creationResult = this.articlesSerivce.Create(creationInfo);

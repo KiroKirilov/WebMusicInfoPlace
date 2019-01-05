@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using WMIP.Constants;
 using WMIP.Data.Models;
 using WMIP.Services.Contracts;
+using WMIP.Services.Dtos.Comments;
 using WMIP.Web.Models.Comments;
 
 namespace WMIP.Web.Controllers
@@ -31,12 +32,14 @@ namespace WMIP.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return this.Json(new { ok = false, reason = GenericMessages.InvalidDataProvided });
+                return this.Json(new { ok = false, reason = GenericMessages.FillOutForm });
             }
 
             var userId = this.usersService.GetIdFromUsername(model.Username);
+            var creationInfo = this.mapper.Map<CreateCommentDto>(model);
+            creationInfo.UserId = userId;
 
-            var creationResult = this.commentsService.CreateNew(model.Title, model.Body, userId, model.PostId, out Comment comment);
+            var creationResult = this.commentsService.Create(creationInfo, out Comment comment);
             if (!creationResult)
             {
                 return this.Json(new { ok = false, reason = string.Format(GenericMessages.InvalidDataProvided) });
@@ -47,7 +50,8 @@ namespace WMIP.Web.Controllers
                 body = comment.Body,
                 author = comment.User.UserName,
                 date = comment.CreatedOn.ToShortDateString(),
-                time = comment.CreatedOn.ToShortTimeString()
+                time = comment.CreatedOn.ToShortTimeString(),
+                isReply = model.Type?.ToLower() == "reply",
             };
 
             return this.Json(new { ok = true, info = commentInfo});
@@ -63,7 +67,7 @@ namespace WMIP.Web.Controllers
                 return this.RedirectToAction("Index", "Home");
             }
 
-            var commentsByUser = this.commentsService.GetCommentsByUser(userId);
+            var commentsByUser = this.commentsService.GetCommentsByUser(userId).ToList();
             var mappedComments= this.mapper.Map<IEnumerable<MyCommentViewModel>>(commentsByUser);
 
             return this.View(mappedComments);

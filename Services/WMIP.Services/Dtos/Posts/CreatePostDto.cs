@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WMIP.Services.Dtos.Articles
+namespace WMIP.Services.Dtos.Posts
 {
-    public class CreateDto : PostCrudDto
+    public class CreatePostDto : PostCrudDto
     {
         public string UserId { get; set; }
     }

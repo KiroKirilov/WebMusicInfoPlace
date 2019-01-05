@@ -31,7 +31,7 @@ namespace WMIP.Web.Controllers
                 return this.RedirectToAction("Index", "Home");
             }
 
-            var article = this.articlesService.GetById(id.Value);
+            var article = this.articlesService.GetById(id.Value, this.User.Identity.Name);
 
             if (article == null)
             {
@@ -46,7 +46,7 @@ namespace WMIP.Web.Controllers
 
         public IActionResult All()
         {
-            var articles = this.articlesService.GetAll().OrderByDescending(a => a.CreatedOn).ToList();
+            var articles = this.articlesService.GetAllOrderedByDate(this.User.Identity.Name).ToList();
             var mappedArticles = this.mapper.Map<IEnumerable<ArticleDisplayViewModel>>(articles);
 
             return this.View(mappedArticles);

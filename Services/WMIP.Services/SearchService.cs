@@ -14,10 +14,12 @@ namespace WMIP.Services
     public class SearchService : ISearchService
     {
         private readonly WmipDbContext context;
+        private readonly IMapper mapper;
 
-        public SearchService(WmipDbContext context)
+        public SearchService(WmipDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         public IEnumerable<SearchResultDto> GetResults(string searchTerm)
@@ -33,20 +35,20 @@ namespace WMIP.Services
             {
                 var results = this.context.Albums
                     .Where(a => a.Name.ToLower().Contains(searchTerm) && a.ApprovalStatus == ApprovalStatus.Approved && a.ReleaseStage != ReleaseStage.Secret)
-                    .Select(a => new SearchResultDto { Id = a.Id, Title = a.Name, SearchResultType = SearchResultType.Album })
+                    .Select(a => this.mapper.Map<SearchResultDto>(a))
                 .Concat(this.context.Songs
                     .Where(s => s.Name.ToLower().Contains(searchTerm) && s.ApprovalStatus == ApprovalStatus.Approved && s.ReleaseStage != ReleaseStage.Secret)
-                    .Select(s => new SearchResultDto { Id = s.Id, Title = s.Name, SearchResultType = SearchResultType.Song })
+                    .Select(a => this.mapper.Map<SearchResultDto>(a))
                 .Concat(this.context.Articles
                         .Where(a => a.Title.ToLower().Contains(searchTerm))
-                        .Select(a => new SearchResultDto { Id = a.Id, Title = a.Title, SearchResultType = SearchResultType.Article })
+                        .Select(a => this.mapper.Map<SearchResultDto>(a))
                  .Concat(this.context.Reviews
                         .Where(r => r.Title.ToLower().Contains(searchTerm))
-                        .Select(r => new SearchResultDto { Id = r.Id, Title = r.Title, SearchResultType = SearchResultType.Review })))).ToList();
+                        .Select(a => this.mapper.Map<SearchResultDto>(a))))).ToList();
 
                 return results;
             }
-            catch
+            catch (Exception e)
             {
                 return new List<SearchResultDto>();
             }

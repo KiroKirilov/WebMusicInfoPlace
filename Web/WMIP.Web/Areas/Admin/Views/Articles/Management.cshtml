@@ -20,7 +20,7 @@
         columns.Add(article => $"<div class='buttonContainer text-center'>" +
             $"<a href='/Admin/Articles/Edit/{article.Id}' class='btn btn-primary actionButton'>Edit</a>" +
             $"<a href='/Admin/Articles/Delete/{article.Id}' class='btn btn-danger actionButton'>Delete</a>" +
-            $"<a href='/Admin/Articles/Details/{article.Id}' class='btn btn-warning actionButton'>Details</a>" +
+            $"<a href='/Articles/Details/{article.Id}' class='btn btn-warning actionButton'>Details</a>" +
             $"</div>").Encoded(false).AppendCss("buttonContainer").Titled("Actions");
     })
     .Empty("No articles")

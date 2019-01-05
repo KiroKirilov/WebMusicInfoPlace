@@ -31,7 +31,7 @@ namespace WMIP.Web.Controllers
 
         public IActionResult Index()
         {
-            var latestArticles = this.articlesService.GetLatest(HomePageConstants.ArticlesToShow);
+            var latestArticles = this.articlesService.GetLatest(HomePageConstants.ArticlesToShow, this.User.Identity.Name);
             var mappedLatestArticles = this.mapper.Map<IEnumerable<ArticleDisplayViewModel>>(latestArticles);
 
             var latestAlbums = this.albumsService.GetLatestReleases(HomePageConstants.AlbumsToShow);

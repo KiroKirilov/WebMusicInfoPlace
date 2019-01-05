@@ -38,8 +38,7 @@ namespace WMIP.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [IgnoreAntiforgeryToken]
-        public IActionResult ChangeRole([FromBody]ChangeRoleViewModel model)
+        public IActionResult ChangeRole(ChangeRoleViewModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -58,7 +57,7 @@ namespace WMIP.Web.Areas.Admin.Controllers
                 return this.Json(new { ok = false, reason = string.Format(GenericMessages.CouldntDoSomething, "set role") });
             }
 
-            return this.Json(new { ok = true });
+            return this.Json(new { ok = true, newRole = model.NewRole, userId = model.UserId });
         }
     }
 }

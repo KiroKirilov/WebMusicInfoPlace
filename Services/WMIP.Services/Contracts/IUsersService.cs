@@ -12,7 +12,7 @@ namespace WMIP.Services.Contracts
 {
     public interface IUsersService : IGettableEntityService<User, string>
     {
-        Task<bool> Register(string username, string password, string confirmPassword, string email, string firstName, string lastName);
+        Task<bool> Register(string username, string password, string email);
 
         bool Login(string username, string password, bool rememberMe);
 

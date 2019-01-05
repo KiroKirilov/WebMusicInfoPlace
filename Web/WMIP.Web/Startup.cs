@@ -61,7 +61,7 @@ namespace WMIP.Web
 
             // Configure AutoMapper
             var mapperConfigBuilder = new MapperConfigBuilder();
-            var config = mapperConfigBuilder.Execute(Assembly.GetExecutingAssembly());
+            var config = mapperConfigBuilder.Execute(Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(ISearchService)));
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
 
@@ -74,6 +74,7 @@ namespace WMIP.Web
                 options.Password.RequireNonAlphanumeric = PasswordConstants.RequireNonAlphanumeric;
                 options.Password.RequiredLength = PasswordConstants.RequiredLength;
                 options.Password.RequiredUniqueChars = PasswordConstants.RequiredUniqueChars;
+                options.Password.RequireDigit = PasswordConstants.RequireDigit;
             });
 
             // Configure identity

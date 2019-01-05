@@ -33,7 +33,6 @@ namespace WMIP.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [IgnoreAntiforgeryToken]
         public IActionResult ChangeApprovalStatus([FromBody]BasicApprovalItemViewModel model)
         {
             if (!this.ModelState.IsValid)

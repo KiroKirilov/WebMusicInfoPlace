@@ -5,9 +5,9 @@
 <div class="col-md-6 col-lg-6">
     <div class="card">
         <div class="card-header">
-            <partial name="RatingPartial" model="new RatingViewModel { PostId = Model.Id, Score = Model.Score }" />
+            <partial name="RatingPartial" model="new RatingViewModel { PostId = Model.Id, Score = Model.Score, RatingType = Model.CurrentUserRating }" />
             <b>@Model.Title</b>
-            <h6>by: @Model.Reviewer</h6>
+            <h6>by: @Model.AuthorName</h6>
             <h6>written on: @Model.CreatedOn.ToShortDateString(), @Model.CreatedOn.ToShortTimeString()</h6>
         </div>
         <div class="card-body">

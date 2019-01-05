@@ -14,8 +14,6 @@
     .Build(columns =>
     {
         columns.Add(user => user.UserName).Titled("Username");
-        columns.Add(user => user.FirstName).Titled("First name");
-        columns.Add(user => user.LastName).Titled("Last name");
         columns.Add(user => user.Email).Titled("Email");
         columns.Add(user => $"<p class='userManagementGridCell' data-id='{user.Id}'>{string.Join(", ", user.Roles)}</p>").Encoded(false).Titled("Role");
         columns.Add(user => Html.Partial("_RoleSelectPartial",

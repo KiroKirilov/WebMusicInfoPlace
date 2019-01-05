@@ -23,7 +23,7 @@ namespace WMIP.Services
         public IEnumerable<BaseMusicModel> GetAllItemsForApproval()
         {
             var allSongs = this.context.Songs.Where(s => s.ApprovalStatus == ApprovalStatus.Pending).ToList().Select(s => s as BaseMusicModel);
-            var allAlbums = this.context.Albums.Where(a =>a.ApprovalStatus == ApprovalStatus.Pending).ToList().Select(a => a as BaseMusicModel);
+            var allAlbums = this.context.Albums.Where(a => a.ApprovalStatus == ApprovalStatus.Pending).ToList().Select(a => a as BaseMusicModel);
             var allItemsForApproval = allSongs.Concat(allAlbums);
             return allItemsForApproval;
         }

@@ -6,10 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using WMIP.Data.Models;
 using WMIP.Data.Models.Enums;
+using WMIP.Services.Dtos.Posts;
 
 namespace WMIP.Web.Models.Articles
 {
-    public class ArticleDisplayViewModel : IHaveCustomMappings
+    public class ArticleDisplayViewModel : IMapFrom<UserRatedPostDto>
     {
         public int Id { get; set; }
 
@@ -23,11 +24,6 @@ namespace WMIP.Web.Models.Articles
 
         public int Score { get; set; }
 
-        public void CreateMappings(IMapperConfigurationExpression configuration)
-        {
-            configuration.CreateMap<Article, ArticleDisplayViewModel>()
-                .ForMember(m => m.AuthorName, opts => opts.MapFrom(e => e.User.UserName))
-                .ForMember(m => m.Score, opts => opts.MapFrom(e => e.Ratings.Sum(r => (int)r.RatingType)));
-        }
+        public RatingType CurrentUserRating { get; set; }
     }
 }

@@ -1,6 +1,10 @@
-﻿using System;
+﻿using AutoMapper;
+using NewsSystem.Common.Mapping.Contracts;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using WMIP.Data.Models;
 
 namespace WMIP.Services.Dtos.Albums
 {

@@ -5,23 +5,23 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using WMIP.Constants;
-using WMIP.Services.Dtos.Articles;
+using WMIP.Services.Dtos.Posts;
 
 namespace WMIP.Web.Areas.Admin.Models.Articles
 {
-    public class ArticleViewModel : IMapTo<CreateDto>
+    public class ArticleViewModel : IMapTo<CreatePostDto>
     {
         public int Id { get; set; }
 
         [Required]
         [StringLength(maximumLength: LengthConstants.TitleMaxLength, 
-            ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
+            ErrorMessage = GenericMessages.InputStringLengthMinAndMaxErrorMessage, 
             MinimumLength = LengthConstants.MinLength)]
         public string Title { get; set; }
 
         [Required]
         [StringLength(maximumLength: LengthConstants.BodyMaxLength,
-            ErrorMessage = "The {0} must be at least {2} characters long.",
+            ErrorMessage = GenericMessages.InputStringLengthMinOnlyErrorMessage,
             MinimumLength = LengthConstants.MinLength)]
         public string Body { get; set; }
         

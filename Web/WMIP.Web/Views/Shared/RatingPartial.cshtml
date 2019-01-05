@@ -2,43 +2,47 @@
 
 @if (this.ViewData["UseHorizontal"] != null && this.ViewData["UseHorizontal"] as bool? == true)
 {
-    <div class="col-md-1">
-        <div class="min-100">
-            @if (User.Identity.IsAuthenticated)
-            {
-                <div class="diplay-inline" data-id="@Model.PostId" data-action="up">
-                    <span class="glyphicon glyphicon-chevron-up mouse-pointer"></span>
-                </div>
-            }
-            <div class="diplay-inline" data-id="@Model.PostId" data-action="ratingsCount">@Model.Score</div>
-            @if (User.Identity.IsAuthenticated)
-            {
-                <div class="diplay-inline" data-id="@Model.PostId" data-action="down">
-                    <span class="glyphicon glyphicon-chevron-down mouse-pointer"></span>
-                </div>
-            }
+    <form>
+        <div class="col-md-1">
+            <div class="min-100">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="diplay-inline" data-id="@Model.PostId" data-action="up">
+                        <span class="@(Model.RatingType == WMIP.Data.Models.Enums.RatingType.Positive ? "upvote-color" : string.Empty) glyphicon glyphicon-chevron-up mouse-pointer"></span>
+                    </div>
+                }
+                <div class="diplay-inline" data-id="@Model.PostId" data-action="ratingsCount">@Model.Score</div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="diplay-inline" data-id="@Model.PostId" data-action="down">
+                        <span class="@(Model.RatingType == WMIP.Data.Models.Enums.RatingType.Negative ? "downvote-color" : string.Empty) glyphicon glyphicon-chevron-down mouse-pointer"></span>
+                    </div>
+                }
+            </div>
         </div>
-    </div>
+    </form>
 }
 else
 {
-    <div class="col-md-1">
-        <div class="text-center">
-            @if (User.Identity.IsAuthenticated)
-            {
-                <div class="row" data-id="@Model.PostId" data-action="up">
-                    <span class="glyphicon glyphicon-chevron-up mouse-pointer"></span>
-                </div>
-            }
-            <div class="row" data-id="@Model.PostId" data-action="ratingsCount">@Model.Score</div>
-            @if (User.Identity.IsAuthenticated)
-            {
-                <div class="row" data-id="@Model.PostId" data-action="down">
-                    <span class="glyphicon glyphicon-chevron-down mouse-pointer"></span>
-                </div>
-            }
+    <form>
+        <div class="col-md-1">
+            <div class="text-center">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="row" data-id="@Model.PostId" data-action="up">
+                        <span class="@(Model.RatingType == WMIP.Data.Models.Enums.RatingType.Positive ? "upvote-color" : string.Empty) glyphicon glyphicon-chevron-up mouse-pointer"></span>
+                    </div>
+                }
+                <div class="row" data-id="@Model.PostId" data-action="ratingsCount">@Model.Score</div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="row" data-id="@Model.PostId" data-action="down">
+                        <span class="@(Model.RatingType == WMIP.Data.Models.Enums.RatingType.Negative ? "downvote-color" : string.Empty) glyphicon glyphicon-chevron-down mouse-pointer"></span>
+                    </div>
+                }
+            </div>
         </div>
-    </div>
+    </form>
 }
 
 <script src="~/js/rating-script.js"></script>

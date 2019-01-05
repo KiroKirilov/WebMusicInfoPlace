@@ -90,13 +90,15 @@ namespace WMIP.Services
         public IEnumerable<ScoredAlbumDto> GetMostAcclaimed(ReviewType reviewType, int count)
         {
             return this.context.Albums
+                .Where(a => a.ReleaseStage != ReleaseStage.Secret && a.ApprovalStatus == ApprovalStatus.Approved)
+                .ToList()
                 .Select(a => new ScoredAlbumDto
                 {
                     Id = a.Id,
                     Name = a.Name,
                     AverageScore = a.Reviews.Where(r => r.ReviewType == reviewType).Any() ?
                         a.Reviews.Where(r => r.ReviewType == reviewType).Average(r => r.ReviewScore) : 0,
-                    ArtistName = a.Artist.UserName
+                    ArtistName = a.Artist?.UserName
                 })
                 .OrderByDescending(a => a.AverageScore)
                 .Take(count)
@@ -151,7 +153,7 @@ namespace WMIP.Services
                 this.context.SaveChanges();
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return false;
             }

@@ -5,6 +5,7 @@ using System.Text;
 using WMIP.Data;
 using WMIP.Data.Models;
 using WMIP.Services.Contracts;
+using WMIP.Services.Dtos.Comments;
 
 namespace WMIP.Services
 {
@@ -17,16 +18,16 @@ namespace WMIP.Services
             this.context = context;
         }
 
-        public bool CreateNew(string title, string body, string userId, int postId, out Comment comment)
+        public bool Create(CreateCommentDto creationInfo, out Comment comment)
         {
             try
             {
                 comment = new Comment
                 {
-                    Title = title,
-                    Body = body,
-                    UserId = userId,
-                    CommentedOnId = postId,                     
+                    Title = creationInfo.Title,
+                    Body = creationInfo.Body,
+                    UserId = creationInfo.UserId,
+                    CommentedOnId = creationInfo.PostId,                     
                 };
 
                 this.context.Comments.Add(comment);

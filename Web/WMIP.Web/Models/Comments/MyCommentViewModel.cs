@@ -24,9 +24,9 @@ namespace WMIP.Web.Models.Comments
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {
             configuration.CreateMap<Comment, MyCommentViewModel>()
-                .ForMember(m => m.Score, opts => opts.MapFrom(e => e.Ratings.Sum(r => (int)r.RatingType)))
+                .ForMember(m => m.Score, opts => opts.MapFrom(e => e.Ratings.Any() ? e.Ratings.Sum(r => (int)r.RatingType) : 0))
                 .ForMember(m => m.PostTitle, opts => opts.MapFrom(e => e.Title))
-                .AfterMap((src, dest) => dest.PostType = src.CommentedOn.Discriminator);
+                .AfterMap((src, dest) => dest.PostType = src.CommentedOn?.Discriminator ?? "[deleted]");
         }
     }
 }

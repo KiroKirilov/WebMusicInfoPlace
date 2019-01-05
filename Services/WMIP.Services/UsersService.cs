@@ -31,8 +31,6 @@ namespace WMIP.Services
                 return this.context.Users.Select(u => new UserDto()
                 {
                     Id = u.Id,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
                     Email = u.Email,
                     UserName = u.UserName,
                     Roles = u.Roles.SelectMany(userRole => this.context.Roles.Where(r => r.Id == userRole.RoleId).Select(r => r.Name)),
@@ -96,38 +94,38 @@ namespace WMIP.Services
             this.signInManager.SignOutAsync().Wait();
         }
 
-        public async Task<bool> Register(string username, string password, string confirmPassword, string email, string firstName, string lastName)
+        public async Task<bool> Register(string username, string password, string email)
         {
-            if (password != confirmPassword)
+            try
+            {
+                var user = new User
+                {
+                    UserName = username,
+                    Email = email,
+                };
+
+                var creationResult = this.userManager.CreateAsync(user, password).Result;
+
+                if (creationResult.Succeeded)
+                {
+                    if (this.userManager.Users.Count() == 1)
+                    {
+                        await this.userManager.AddToRoleAsync(user, "Admin");
+                    }
+                    else
+                    {
+                        await this.userManager.AddToRoleAsync(user, "User");
+                    }
+                    
+                    this.signInManager.SignInAsync(user, false).GetAwaiter().GetResult();
+                }
+
+                return creationResult.Succeeded;
+            }
+            catch (Exception e)
             {
                 return false;
             }
-
-            var user = new User
-            {
-                UserName = username,
-                Email = email,
-                FirstName = firstName,
-                LastName = lastName,
-            };
-
-            var creationResult = this.userManager.CreateAsync(user, password).Result;
-
-            if (creationResult.Succeeded)
-            {
-                if (this.userManager.Users.Count() == 1)
-                {
-                    await this.userManager.AddToRoleAsync(user, "Admin");
-                }
-                else
-                {
-                    await this.userManager.AddToRoleAsync(user, "User");
-                }
-
-                this.signInManager.SignInAsync(user, false).Wait();
-            }
-
-            return creationResult.Succeeded;
         }
 
         public async Task<bool> SetUserRole(User user, string newRole)
@@ -144,7 +142,7 @@ namespace WMIP.Services
 
                 return assignmentResult.Succeeded;
             }
-            catch
+            catch (Exception e)
             {
                 return false;
             }
