@@ -1,0 +1,35 @@
+﻿@model IEnumerable<WMIP.Web.Models.Rating.MyRatingViewModel>
+<link rel="stylesheet" href="~/css/mvc-grid.css" asp-append-version="true" />
+
+@{
+    ViewData["Title"] = "My Ratings";
+}
+
+<h1 class="text-center">My Ratings</h1>
+<hr class="hr-1 bg-info w50" />
+
+@(Html
+    .Grid(Model)
+    .Build(columns =>
+    {
+        columns.Add(rating => rating.PostTitle).Titled("Post Title");
+        columns.Add(rating => rating.PostType).Titled("Post Type");
+        columns.Add(rating => rating.RatingType).Titled("Rating Type");
+        columns.Add(rating => rating.PostType != "Comment" ?
+            $"<div class='buttonContainer text-center'>" +
+            $"<a href='/{rating.PostType}/Details/{rating.PostId}' class='btn btn-primary actionButton'>Go To Post</a>" +
+            $"</div>" : string.Empty).Encoded(false).AppendCss("buttonContainer").Titled("Actions");
+    })
+    .Empty("No ratings")
+    .Filterable()
+    .Sortable()
+    .Pageable(pager =>
+    {
+        pager.RowsPerPage = 10;
+    })
+)
+
+@section Scripts {
+    <script src="~/js/mvc-grid.js"></script>
+    <script src="~/js/initialize-mvc-grid.js"></script>
+}

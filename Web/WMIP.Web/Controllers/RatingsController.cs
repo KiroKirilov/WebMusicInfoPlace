@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,16 @@ namespace WMIP.Web.Controllers
     {
         private readonly IRatingsService ratingsService;
         private readonly IUsersService usersService;
+        private readonly IMapper mapper;
 
-        public RatingsController(IRatingsService ratingsService, IUsersService usersService)
+        public RatingsController(IRatingsService ratingsService, IUsersService usersService, IMapper mapper)
         {
             this.ratingsService = ratingsService;
             this.usersService = usersService;
+            this.mapper = mapper;
         }
 
         [HttpPost]
-        [IgnoreAntiforgeryToken]
         public IActionResult Rate([FromBody]RatingViewModel model)
         {
             var userId = this.usersService.GetIdFromUsername(this.User.Identity.Name);
@@ -28,6 +30,13 @@ namespace WMIP.Web.Controllers
             var newScore = this.ratingsService.Rate(model.PostId, userId, model.RatingType);
 
             return this.Json(new { newScore });
+        }
+
+        public IActionResult My()
+        {
+            var usersRatings = this.ratingsService.GetUsersRatings(this.User.Identity.Name);
+            var mappedRatings = this.mapper.Map<IEnumerable<MyRatingViewModel>>(usersRatings);
+            return this.View(mappedRatings);
         }
     }
 }

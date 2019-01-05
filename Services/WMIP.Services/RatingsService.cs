@@ -18,6 +18,18 @@ namespace WMIP.Services
             this.context = context;
         }
 
+        public IEnumerable<Rating> GetUsersRatings(string username)
+        {
+            try
+            {
+                return this.context.Ratings.Where(r => r.User.UserName == username).ToList();
+            }
+            catch
+            {
+                return new List<Rating>();
+            }
+        }
+
         public RatingType GetUsersRatingTypeForAPost(int postId, string username)
         {
             var rating = this.context.Ratings.FirstOrDefault(r => r.User.UserName == username && r.PostId == postId);
