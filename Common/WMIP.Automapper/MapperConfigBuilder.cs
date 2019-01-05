@@ -9,16 +9,19 @@ namespace WMIP.Automapper
 {
     public class MapperConfigBuilder
     {
-        public MapperConfiguration Execute(Assembly assembly)
+        public MapperConfiguration Execute(params Assembly[] assemblies)
         {
             return new MapperConfiguration(
                 cfg =>
                 {
-                    IEnumerable<Type> types = assembly.GetExportedTypes();
-                    LoadBothWaysMapping(types, cfg);
-                    LoadStandardMappings(types, cfg);
-                    LoadReverseMappings(types, cfg);
-                    LoadCustomMappings(types, cfg);
+                    foreach (var assembly  in assemblies)
+                    {
+                        IEnumerable<Type> types = assembly.GetExportedTypes();
+                        LoadBothWaysMapping(types, cfg);
+                        LoadStandardMappings(types, cfg);
+                        LoadReverseMappings(types, cfg);
+                        LoadCustomMappings(types, cfg);
+                    }
                 });
         }
 
