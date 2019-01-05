@@ -7,6 +7,9 @@
   <ItemGroup>
     <Compile Remove="Migrations\20181230092222_UpdatedDeleteBehaviour.cs" />
     <Compile Remove="Migrations\20181230092324_UpdatedDeleteBehaviour.cs" />
+    <Compile Remove="Migrations\20190105120739_AddedValidation.cs" />
+    <Compile Remove="Migrations\20190105120848_AddedValidation.cs" />
+    <Compile Remove="Migrations\20190105120953_AddedValidation.cs" />
   </ItemGroup>
 
   <ItemGroup>

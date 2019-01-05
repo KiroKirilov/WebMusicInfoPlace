@@ -19,10 +19,6 @@ namespace WMIP.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
         }
 
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
-
         public DateTime RegisteredOn { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }

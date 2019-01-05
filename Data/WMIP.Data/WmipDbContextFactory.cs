@@ -24,7 +24,9 @@ namespace WMIP.Data
 
             builder.UseSqlServer(connectionString);
 
-            builder.ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
+            builder.ConfigureWarnings(w => w.Ignore(RelationalEventId.QueryClientEvaluationWarning));
+
+            builder.ConfigureWarnings(w => w.Ignore(CoreEventId.DetachedLazyLoadingWarning));
 
             return new WmipDbContext(builder.Options);
         }

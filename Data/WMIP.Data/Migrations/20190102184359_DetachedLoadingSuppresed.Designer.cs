@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WMIP.Data;
 
 namespace WMIP.Data.Migrations
 {
     [DbContext(typeof(WmipDbContext))]
-    partial class WmipDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190102184359_DetachedLoadingSuppresed")]
+    partial class DetachedLoadingSuppresed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,11 +145,9 @@ namespace WMIP.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<string>("Genre")
-                        .IsRequired();
+                    b.Property<string>("Genre");
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Name");
 
                     b.Property<DateTime?>("ReleaseDate");
 
@@ -189,8 +189,7 @@ namespace WMIP.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Body")
-                        .IsRequired();
+                    b.Property<string>("Body");
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -199,8 +198,7 @@ namespace WMIP.Data.Migrations
 
                     b.Property<string>("Summary");
 
-                    b.Property<string>("Title")
-                        .IsRequired();
+                    b.Property<string>("Title");
 
                     b.Property<string>("UserId");
 
@@ -246,15 +244,13 @@ namespace WMIP.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<string>("Genre")
-                        .IsRequired();
+                    b.Property<string>("Genre");
 
                     b.Property<string>("Lyrics");
 
                     b.Property<string>("MusicVideoLink");
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Name");
 
                     b.Property<DateTime?>("ReleaseDate");
 
@@ -283,6 +279,10 @@ namespace WMIP.Data.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
