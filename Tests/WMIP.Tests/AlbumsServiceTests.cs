@@ -60,7 +60,7 @@ namespace WMIP.Tests
         {
             // Arrange
             var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
-            var album1 = new Album { Id = 1, Name = "Abm1", ReleaseDate = DateTime.UtcNow.AddDays(-1) ,ApprovalStatus = ApprovalStatus.Approved, ReleaseStage = ReleaseStage.Released };
+            var album1 = new Album { Id = 1, Name = "Abm1", ReleaseDate = DateTime.UtcNow.AddDays(-1), ApprovalStatus = ApprovalStatus.Approved, ReleaseStage = ReleaseStage.Released };
             var album2 = new Album { Id = 2, Name = "Abm2", ReleaseDate = DateTime.UtcNow.AddDays(-2), ApprovalStatus = ApprovalStatus.Approved, ReleaseStage = ReleaseStage.Released };
             var album3 = new Album { Id = 3, Name = "Abm3", ReleaseDate = DateTime.UtcNow.AddDays(+1), ApprovalStatus = ApprovalStatus.Approved, ReleaseStage = ReleaseStage.Released };
             context.Albums.AddRange(album1, album2, album3);
@@ -139,18 +139,34 @@ namespace WMIP.Tests
         }
 
         [Fact]
-        public void Create_IncreasesCount()
+        public void Create_IncreasesCountAndAddsItem()
         {
             // Arrange
             var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
             var albumsService = new AlbumsService(context);
-            var creationInfo = new CreateAlbumDto() { Name = "Alb" };
+            var creationInfo = new CreateAlbumDto()
+            {
+                AlbumCoverLink = "newlink",
+                Genre = "newgenre",
+                Name = "newname",
+                ReleaseDate = DateTime.Now.AddDays(1),
+                ReleaseStage = ReleaseStage.Announced,
+                SpotifyLink = "newSLink",
+                SelectedSongIds = new int[] { 1, 2, 3, 4, 5, 6, 7 }
+            };
 
             // Act
             albumsService.Create(creationInfo);
 
             //Assert
             Assert.Single(context.Albums);
+            Assert.Equal(creationInfo.Name, context.Albums.First().Name);
+            Assert.Equal(creationInfo.AlbumCoverLink, context.Albums.First().AlbumCoverLink);
+            Assert.Equal(creationInfo.Genre, context.Albums.First().Genre);
+            Assert.Equal(creationInfo.ReleaseDate, context.Albums.First().ReleaseDate);
+            Assert.Equal(creationInfo.ReleaseStage, context.Albums.First().ReleaseStage);
+            Assert.Equal(creationInfo.SpotifyLink, context.Albums.First().SpotifyLink);
+            Assert.Equal(creationInfo.SelectedSongIds, context.Albums.First().AlbumsSongs.Select(s => s.SongId));
         }
 
         [Fact]
@@ -158,17 +174,43 @@ namespace WMIP.Tests
         {
             // Arrange
             var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
-            var album = new Album { Id = 1, Name = "Abm1" };
+            var album = new Album
+            {
+                Id = 1,
+                AlbumCoverLink = "first",
+                Genre = "first",
+                Name = "first",
+                ReleaseDate = DateTime.Now.AddDays(-1),
+                ReleaseStage = ReleaseStage.Secret,
+                SpotifyLink = "first",
+                AlbumsSongs = new List<AlbumSong>() { new AlbumSong { SongId = 1 } }
+            };
             context.Albums.Add(album);
             context.SaveChanges();
             var albumsService = new AlbumsService(context);
-            var editInfo = new EditAlbumDto() { Id = 1, Name = "Alb" };
+            var editInfo = new EditAlbumDto()
+            {
+                Id = 1,
+                AlbumCoverLink = "newlink",
+                Genre = "newgenre",
+                Name = "newname",
+                ReleaseDate = DateTime.Now.AddDays(1),
+                ReleaseStage = ReleaseStage.Announced,
+                SpotifyLink = "newSLink",
+                SelectedSongIds = new int[] { 1, 2, 3, 4, 5, 6, 7 }
+            };
 
             // Act
             albumsService.Edit(editInfo);
 
             //Assert
             Assert.Equal(editInfo.Name, context.Albums.First().Name);
+            Assert.Equal(editInfo.AlbumCoverLink, context.Albums.First().AlbumCoverLink);
+            Assert.Equal(editInfo.Genre, context.Albums.First().Genre);
+            Assert.Equal(editInfo.ReleaseDate, context.Albums.First().ReleaseDate);
+            Assert.Equal(editInfo.ReleaseStage, context.Albums.First().ReleaseStage);
+            Assert.Equal(editInfo.SpotifyLink, context.Albums.First().SpotifyLink);
+            Assert.Equal(editInfo.SelectedSongIds, context.Albums.First().AlbumsSongs.Select(s => s.SongId));
         }
 
         [Fact]
@@ -188,6 +230,49 @@ namespace WMIP.Tests
             //Assert
             Assert.Single(context.Albums);
             Assert.Equal(album2.Name, context.Albums.First().Name);
+        }
+
+        [Fact]
+        public void IsUserCreator_ReturnsCorrectResults()
+        {
+            // Arrange
+            var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
+            var album1 = new Album { Id = 1, Name = "Abm1", Artist = new User { Id = "1", UserName = "ivan" } };
+            var album2 = new Album { Id = 2, Name = "Abm2", Artist = new User { Id = "2", UserName = "pesho" } };
+            context.Albums.AddRange(album1, album2);
+            context.SaveChanges();
+            var albumsService = new AlbumsService(context);
+
+            // Act
+            var usernameResultTrue = albumsService.IsUserCreatorByName("ivan", 1);
+            var usernameResultFalse = albumsService.IsUserCreatorByName("ivan", 2);
+            var idResultTrue = albumsService.IsUserCreatorById("1", 1);
+            var idResultFalse = albumsService.IsUserCreatorById("1", 2);
+
+            //Assert
+            Assert.True(usernameResultTrue);
+            Assert.False(usernameResultFalse);
+            Assert.True(idResultTrue);
+            Assert.False(idResultFalse);
+        }
+
+        [Fact]
+        public void GetById_ReturnsCorrectItem()
+        {
+            // Arrange
+            var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
+            var album1 = new Album { Id = 1, Name = "Abm1" };
+            var album2 = new Album { Id = 2, Name = "Abm2" };
+            context.Albums.AddRange(album1, album2);
+            context.SaveChanges();
+            var albumsService = new AlbumsService(context);
+
+            // Act
+            var result = albumsService.GetById(1);
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.Equal(album1.Name, result.Name);
         }
     }
 }

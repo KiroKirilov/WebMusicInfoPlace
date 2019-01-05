@@ -1,7 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Moq;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using WMIP.Data;
 using WMIP.Data.Models;
 using WMIP.Services;
@@ -141,6 +147,75 @@ namespace WMIP.Tests
             Assert.Single(users);
             Assert.Equal(user.UserName, users.First().UserName);
             Assert.True(users.First().Roles.First() == "Admin");
+        }
+
+        [Fact]
+        public void Login_LogsInSuccessfully()
+        {
+            // Arrange
+            var username = "ivan";
+            var password = "asdasd";
+            var rememberMe = true;
+            var mockUserStore = new Mock<IUserStore<User>>();
+            var userManager = new Mock<UserManager<User>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+            var signInManager = new Mock<SignInManager<User>>(userManager.Object,
+                new Mock<IHttpContextAccessor>().Object,
+                new Mock<IUserClaimsPrincipalFactory<User>>().Object,
+                new Mock<IOptions<IdentityOptions>>().Object,
+                new Mock<ILogger<SignInManager<User>>>().Object,
+                new Mock<IAuthenticationSchemeProvider>().Object);
+            signInManager.Setup(u => u.PasswordSignInAsync(username, password, rememberMe, false)).Returns(Task.FromResult(SignInResult.Success));
+            var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
+            var usersService = new UsersService(signInManager.Object, userManager.Object, context);
+
+            // Act
+            var result = usersService.Login(username, password, rememberMe);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void Logout_LogsOutSuccessfully()
+        {
+            // Arrange
+            var mockUserStore = new Mock<IUserStore<User>>();
+            var userManager = new Mock<UserManager<User>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+            var signInManager = new Mock<SignInManager<User>>(userManager.Object,
+                new Mock<IHttpContextAccessor>().Object,
+                new Mock<IUserClaimsPrincipalFactory<User>>().Object,
+                new Mock<IOptions<IdentityOptions>>().Object,
+                new Mock<ILogger<SignInManager<User>>>().Object,
+                new Mock<IAuthenticationSchemeProvider>().Object);
+            var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
+            var usersService = new UsersService(signInManager.Object, userManager.Object, context);
+
+            // Act
+            var result = true;
+            try
+            {
+                usersService.Logout();
+            }
+            catch
+            {
+                result = false;
+            }
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void GetAllUsersWithRoles_ReturnsEmptyCollectionOnException()
+        {
+            //Arrange
+            var usersService = new UsersService(null, null, null);
+
+            // Act
+            var users = usersService.GetAllUsersWithRoles();
+
+            // Assert
+            Assert.Empty(users);
         }
     }
 }

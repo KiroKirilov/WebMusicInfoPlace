@@ -126,5 +126,48 @@ namespace WMIP.Tests
             Assert.Single(context.Songs);
             Assert.Equal(song2.Name, context.Songs.First().Name);
         }
+
+        [Fact]
+        public void IsUserCreator_ReturnsCorrectResults()
+        {
+            // Arrange
+            var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
+            var song1 = new Song { Id = 1, Name = "s1", Artist = new User { Id = "1", UserName = "ivan" } };
+            var song2 = new Song { Id = 2, Name = "s1", Artist = new User { Id = "2", UserName = "pesho" } };
+            context.Songs.AddRange(song1, song2);
+            context.SaveChanges();
+            var songsService = new SongsService(context);
+
+            // Act
+            var usernameResultTrue = songsService.IsUserCreatorByName("ivan", 1);
+            var usernameResultFalse = songsService.IsUserCreatorByName("ivan", 2);
+            var idResultTrue = songsService.IsUserCreatorById("1", 1);
+            var idResultFalse = songsService.IsUserCreatorById("1", 2);
+
+            //Assert
+            Assert.True(usernameResultTrue);
+            Assert.False(usernameResultFalse);
+            Assert.True(idResultTrue);
+            Assert.False(idResultFalse);
+        }
+
+        [Fact]
+        public void GetById_ReturnsCorrectItem()
+        {
+            // Arrange
+            var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
+            var song1 = new Song { Id = 1, Name = "s1" };
+            var song2 = new Song { Id = 2, Name = "s2" };
+            context.Songs.AddRange(song1, song2);
+            context.SaveChanges();
+            var songsService = new SongsService(context);
+
+            // Act
+            var result = songsService.GetById(1);
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.Equal(song1.Name, result.Name);
+        }
     }
 }

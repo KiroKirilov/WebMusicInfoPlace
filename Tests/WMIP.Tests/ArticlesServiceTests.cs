@@ -103,9 +103,10 @@ namespace WMIP.Tests
             var creationInfo = new CreatePostDto() { Title = "article1" };
 
             // Act
-            articlesService.Create(creationInfo);
+            var result = articlesService.Create(creationInfo);
 
             //Assert
+            Assert.True(result);
             Assert.Single(context.Articles);
         }
 
@@ -121,9 +122,10 @@ namespace WMIP.Tests
             var editInfo = new EditPostDto() { Id = 1, Title = "aaaararar" };
 
             // Act
-            articlesService.Edit(editInfo);
+            var result = articlesService.Edit(editInfo);
 
             //Assert
+            Assert.True(result);
             Assert.Equal(editInfo.Title, context.Articles.First().Title);
         }
 
@@ -139,11 +141,74 @@ namespace WMIP.Tests
             var articlesService = new ArticlesService(context);
 
             // Act
-            articlesService.Delete(1);
+            var result = articlesService.Delete(1);
 
             //Assert
+            Assert.True(result);
             Assert.Single(context.Articles);
             Assert.Equal(article2.Title, context.Articles.First().Title);
+        }
+
+        [Fact]
+        public void Delete_ReturnsFalseIfItemNotFound()
+        {
+            // Arrange
+            var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
+            var article1 = new Article { Id = 1, Title = "s1" };
+            var article2 = new Article { Id = 2, Title = "s2" };
+            context.Articles.AddRange(article1, article2);
+            context.SaveChanges();
+            var articlesService = new ArticlesService(context);
+
+            // Act
+            var result = articlesService.Delete(3);
+
+            //Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void Delete_ReturnsFalseOnExcepiton()
+        {
+            // Arrange
+            var articlesService = new ArticlesService(null);
+
+            // Act
+            var result = articlesService.Delete(3);
+
+            //Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void Edit_ReturnsFalseOnExcepiton()
+        {
+            // Arrange
+            var articlesService = new ArticlesService(null);
+
+            // Act
+            var result = articlesService.Edit(null);
+
+            //Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void Edit_ReturnsFalseIfNotFound()
+        {
+            // Arrange
+            var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
+            var article = new Article { Id = 1, Title = "art1" };
+            context.Articles.Add(article);
+            context.SaveChanges();
+            var articlesService = new ArticlesService(context);
+            var editInfo = new EditPostDto() { Id = 2, Title = "aaaararar" };
+
+            // Act
+            var result = articlesService.Edit(editInfo);
+
+            //Assert
+            Assert.False(result);
         }
     }
 }

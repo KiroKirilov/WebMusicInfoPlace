@@ -119,11 +119,75 @@ namespace WMIP.Tests
             var reviewsService = new ReviewsService(context);
 
             // Act
-            reviewsService.Delete(1);
+            var result = reviewsService.Delete(1);
 
             //Assert
+            Assert.True(result);
             Assert.Single(context.Reviews);
             Assert.Equal(review2.Title, context.Reviews.First().Title);
+        }
+
+        [Fact]
+        public void GetById_ReturnsCorrectItem()
+        {
+            // Arrange
+            var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
+            var review1 = new Review { Id = 1, Title = "s1" };
+            var review2 = new Review { Id = 2, Title = "s2" };
+            context.Reviews.AddRange(review1, review2);
+            context.SaveChanges();
+            var reviewsService = new ReviewsService(context);
+
+            // Act
+            var result = reviewsService.GetById(1);
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.Equal(review1.Title, result.Title);
+        }
+
+        [Fact]
+        public void Delete_ReturnsFalseIfItemNotFound()
+        {
+            // Arrange
+            var context = this.ServiceProvider.GetRequiredService<WmipDbContext>();
+            var review1 = new Review { Id = 1, Title = "s1" };
+            var review2 = new Review { Id = 2, Title = "s2" };
+            context.Reviews.AddRange(review1, review2);
+            context.SaveChanges();
+            var reviewsService = new ReviewsService(context);
+
+            // Act
+            var result = reviewsService.Delete(3);
+
+            //Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void Delete_ReturnsFalseOnExcepiton()
+        {
+            // Arrange
+            var reviewsService = new ReviewsService(null);
+
+            // Act
+            var result = reviewsService.Delete(1);
+
+            //Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void GetReviewsByUser_ReturnsEmptyCollectionOnException()
+        {
+            // Arrange
+            var reviewsService = new ReviewsService(null);
+
+            // Act
+            var result = reviewsService.GetReviewsByUser("1");
+
+            //Assert
+            Assert.Empty(result);
         }
     }
 }
