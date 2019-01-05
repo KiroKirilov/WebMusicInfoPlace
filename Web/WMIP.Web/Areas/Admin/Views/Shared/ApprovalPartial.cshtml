@@ -1,0 +1,9 @@
+﻿@model WMIP.Web.Areas.Admin.Models.Approval.BasicApprovalItemViewModel
+
+<form class="mx-auto w50">
+    <div class='buttonContainer'>
+        <a data-type='@Model.ItemType' data-action='Approved' data-id='@Model.ItemId' class='btn btn-primary actionButton'>Approve</a>
+        <a data-type='@Model.ItemType' data-action='Rejected' data-id='@Model.ItemId' class='btn btn-danger actionButton'>Reject</a>
+    </div>
+</form>
+
