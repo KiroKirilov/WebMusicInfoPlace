@@ -156,7 +156,7 @@ input[type=date] {
 }
 
 .commentReply, .newCommentsContainer {
-    margin-left: 10px !important;
+    margin-left: 10px;
     border: 1px solid black;
     padding: 3px;
     border-radius: 2px;
@@ -357,4 +357,8 @@ input[type=date] {
     width: 75%;
     overflow:hidden;
     word-wrap: normal;
+}
+
+.commentBody > .newCommentsContainer {
+    margin-left: 10px;
 }
