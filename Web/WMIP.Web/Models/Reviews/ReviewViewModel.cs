@@ -21,7 +21,7 @@ namespace WMIP.Web.Models.Reviews
         public string Body { get; set; }
 
         [Required]
-        [StringLength(maximumLength: LengthConstants.TitleMaxLength,
+        [StringLength(maximumLength: LengthConstants.SummaryMaxLength,
             ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
             MinimumLength = LengthConstants.MinLength)]
         public string Summary { get; set; }

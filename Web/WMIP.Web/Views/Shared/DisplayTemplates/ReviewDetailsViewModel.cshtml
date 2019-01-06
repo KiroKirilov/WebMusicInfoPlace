@@ -2,17 +2,19 @@
 
 <div class="text-center">
     <partial name="RatingPartial" model="new RatingViewModel { PostId = Model.Id, Score = Model.Score, RatingType = Model.CurrentUserRating }" />
-    <h1 class="font-weight-bold">@Model.Title</h1>
-    <h6>a review by: @Model.AuthorName, @Model.ReviewType</h6>
-    <h6>written on: @Model.CreatedOn.ToShortDateString(), @Model.CreatedOn.ToShortTimeString()</h6>
-    @if (Model.AlbumName == null)
-    {
-        <h6 class="font-italic">for: [deleted]</h6>
-    }
-    else
-    {
-        <h6 class="font-italic">for: <a href="/Albums/Details/@Model.AlbumId">@Model.AlbumName</a></h6>
-    }
+    <div class="col-md-11">
+        <h1 class="font-weight-bold">@Model.Title</h1>
+        <h6>a review by: @Model.AuthorName, @Model.ReviewType</h6>
+        <h6>written on: @Model.CreatedOn.ToShortDateString(), @Model.CreatedOn.ToShortTimeString()</h6>
+        @if (Model.AlbumName == null)
+        {
+            <h6 class="font-italic">for: [deleted]</h6>
+        }
+        else
+        {
+            <h6 class="font-italic">for: <a href="/Albums/Details/@Model.AlbumId">@Model.AlbumName</a></h6>
+        }
+    </div>
 </div>
 <hr class="hr-1 bg-info w50" />
 

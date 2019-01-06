@@ -3,7 +3,7 @@
 @if (this.ViewData["UseHorizontal"] != null && this.ViewData["UseHorizontal"] as bool? == true)
 {
     <form>
-        <div class="col-md-1">
+        <div class="col-md-1 col-sm-12 col-xs-12">
             <div class="min-100">
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -25,7 +25,7 @@
 else
 {
     <form>
-        <div class="col-md-1">
+        <div class="col-md-1 col-sm-1 col-xs-1">
             <div class="text-center">
                 @if (User.Identity.IsAuthenticated)
                 {

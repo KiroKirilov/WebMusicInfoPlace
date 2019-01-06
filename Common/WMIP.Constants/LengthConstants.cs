@@ -8,7 +8,9 @@ namespace WMIP.Constants
     {
         public const int MinLength = 3;
 
-        public const int TitleMaxLength = 50;
+        public const int TitleMaxLength = 100;
+
+        public const int SummaryMaxLength = 150;
 
         public const int BodyMaxLength = int.MaxValue;
     }

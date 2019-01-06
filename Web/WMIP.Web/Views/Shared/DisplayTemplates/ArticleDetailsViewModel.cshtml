@@ -2,17 +2,19 @@
 
 <div class="text-center">
     <partial name="RatingPartial" model="new RatingViewModel { PostId = Model.Id, Score = Model.Score, RatingType = Model.CurrentUserRating }" />
-    <h1 class="font-weight-bold">@Model.Title</h1>
-    <h6>an article by: @Model.AuthorName</h6>
-    <h6>written on: @Model.CreatedOn.ToShortDateString(), @Model.CreatedOn.ToShortTimeString()</h6>
-</div>
-<hr class="hr-1 bg-info w50" />
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12 reviewBody">
-            @Html.Raw(Model.Body)
+    <div class="col-md-11">
+        <h1 class="font-weight-bold">@Model.Title</h1>
+        <h6>an article by: @Model.AuthorName</h6>
+        <h6>written on: @Model.CreatedOn.ToShortDateString(), @Model.CreatedOn.ToShortTimeString()</h6>
         </div>
     </div>
-</div>
-<hr class="hr-1 bg-info w50" />
+    <hr class="hr-1 bg-info w50" />
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 reviewBody">
+                @Html.Raw(Model.Body)
+            </div>
+        </div>
+    </div>
+    <hr class="hr-1 bg-info w50" />

@@ -28,7 +28,7 @@ namespace WMIP.Web.Models.Reviews
 
         public RatingType CurrentUserRating { get; set; }
 
-        public IEnumerable<UserRatedPostDto> Comments { get; set; }
+        public IEnumerable<CommentDisplayViewModel> Comments { get; set; }
 
         public int ReviewScore { get; set; }
 

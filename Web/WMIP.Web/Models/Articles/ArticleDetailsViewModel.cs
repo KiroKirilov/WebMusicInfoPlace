@@ -30,11 +30,5 @@ namespace WMIP.Web.Models.Articles
         public RatingType CurrentUserRating { get; set; }
 
         public IEnumerable<CommentDisplayViewModel> Comments { get; set; }
-
-        public void CreateMappings(IMapperConfigurationExpression configuration)
-        {
-            configuration.CreateMap<UserRatedPostDto, ArticleDetailsViewModel>()
-                .ForMember(m => m.Comments, opts => opts.MapFrom(e => e.Comments.OrderByDescending(c => c.CreatedOn)));
-        }
     }
 }
